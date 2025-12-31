@@ -7,24 +7,27 @@
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-    <div class="container article-page">
-        <header>
-            <h1>Tiny Language Model</h1>
-        </header>
+    <header>
+        <h1>Tiny Language Model</h1>
+        <p>Understanding large language models by building a tiny one</p>
+    </header>
 
+    <div class="container article-page">
         <article class="article">
             <div class="article-meta">
                 Published on December 31, 2025 • By Peter Collingridge
             </div>
 
-            <h1 class="article-title">Basic Neural Network</h1>
+            <h1 class="article-title">Introduction</h1>
 
             <div class="article-content">
                 <p>
-                  In these articles I'm going to work through building a AI model to generate sentences in a similar way to large language models (LLMs).
-                  In order to understand how LLMs work, I think it's helpful to build a very simple version.
-                  I will use a very small set of sentences to train the model, and the model will be a lot smaller itself, so I'm calling it a tiny language model.
-                  I hope that by keeping it simple it will be easier to understand how exactly LLMs work in principle.
+                    The aim of this series of articles is to understand how large language models (LLMs) work by building a very simple version.
+                    I've found many articles and videos explaining now neural nets work, or how LLMs work in theory,
+                    but I haven't found any that show exactly how an LLM works.
+                    That's probably because real LLMs are so complex that no one really understands exactly what they're doing.
+                    I'm hoping if I keep things really simple, I can build a tiny language model that is fully understandable.
+                    In particular, I want to understand how attention mechanisms and transformers work, since these are the key innovations that make LLMs so powerful.
                 </p>
 
                 <p>
