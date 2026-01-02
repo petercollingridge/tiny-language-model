@@ -21,7 +21,6 @@ class Tokeniser:
         print("Block size:", self.block_size)
         print("Vocab:", self.vocab)
 
-
         self.stoi = {ch: i for i, ch in enumerate(self.vocab)}
         self.itos = {i: ch for ch, i in self.stoi.items()}
 

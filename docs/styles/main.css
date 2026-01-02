@@ -182,6 +182,37 @@ nav a:hover {
     padding-left: 2rem;
 }
 
+.article-content table td {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+}
+
+.article-content table th {
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.2rem 0.5rem;
+}
+
+.article-content table .rotated {
+    transform: rotate(-90deg);
+    white-space: nowrap;
+}
+
+.article-content table th.label{
+    font-weight: 400;
+    font-size: 1.2rem;
+}
+
+.article-content table th.label-h {
+    border-bottom: 1px solid #ccc;
+}
+
+.article-content table .label-v {
+    border-right: 1px solid #ccc;
+}
+
+
 /* Code Block Styles */
 .code-block {
     background-color: #f8f9fa;

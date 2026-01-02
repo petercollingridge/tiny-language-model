@@ -100,54 +100,64 @@
                     where blue indicates a positive weight and red a negative weight.
                 </p>
 
-                <div >
-                    <img src="../example1/neural_net.svg" alt="Neural network diagram showing input, hidden, and output layers" style="max-width:100%; height:auto;">
-                    <div class="caption">
-                        Figure 1: Simple neural network with input, hidden, and output layers for predicting the next word.
-                    </div>
-                </div>
-                
-                <h2>Embeddings</h2>
-
-                <p>
-                    If you looks at the weights between the input layer and the hidden layer,
-                    you can see they are different for each word, except for 'herbivores' and 'wooly'.
-                    This is because both words always appear in the same context (after 'sheep are'),
-                    so the neural network has learned to treat them the same.
-                </p>
-
-                <ul>
-                    <li>&lt;BR&gt;: Blue, Red</li>
-                    <li>are: Red, Blue</li>
-                    <li>herbivores, wooly: Blue, Blue</li>
-                    <li>sheep: Red, Red</li>
-                </ul>
-
-                <p>
-                    In effect, the network has encoded the words as a vector of two numbers.
-                    This is a very simple form of word embedding. Instead of needing a separate representation for each word,
-                    we can represent each word as a point in a two-dimensional space.
-                    Words that appear in similar contexts end up close together in this space.
-                </p>
-
-                <p>Plotting the weights in the two-dimensional space gives us a visual representation of the word embeddings.</p>
-
-                <div>
-                    <img src="../example1/embeddings_.svg" alt="Plot of word embeddings in two-dimensional space" style="display: block; margin-left: auto; margin-right: auto;">
-                    <div class="caption">
-                        Figure 2: Plot of word embeddings in two-dimensional space. Notice that the words 'herbivores' and 'wooly' are in the exact same position.
-                    </div>
-                </div>
-
-                <p>
-                    Each word (token) is represented as a one-hot encoded vector.
-                    For example, with our vocabulary of five tokens (&lt;&gt;, sheep, are, herbivores, wooly),
-                    the word 'sheep' would be represented as [0, 1, 0, 0, 0].
-                    This is a sparse representation, where only one element is 'hot' (1) and the rest are 'cold' (0).
-                    The neural network learns to map these one-hot vectors to a smaller dense vectors in the hidden layer,
-                    which capture semantic relationships between words.
-                    Now sheep can be represented as [-1.60, -4.77] in the two-dimensional embedding space.
-                </p>
+               <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2" colspan="2"></th>
+                        <th colspan="5" class="label label-h">Output</th>
+                    </tr>
+                    <tr>
+                        <th>&lt;BR&gt;</th>
+                        <th>are</th>
+                        <th>herbivores</th>
+                        <th>sheep</th>
+                        <th>slow</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><th class="label label-v" rowspan="6"><div class="rotated">Input</div></th></tr>
+                    <tr>
+                        <th>&lt;BR&gt;</th>
+                        <td style="background-color: #ff9999;">-4.0494</td>
+                        <td style="background-color: #ff9999;">-3.7335</td>
+                        <td style="background-color: #ff9999;">-3.0846</td>
+                        <td style="background-color: #9999ff;">4.2455</td>
+                        <td style="background-color: #ff9999;">-4.0111</td>
+                    </tr>
+                    <tr>
+                        <th>are</th>
+                        <td style="background-color: #ff9999;">-4.2853</td>
+                        <td style="background-color: #ff9999;">-4.8309</td>
+                        <td style="background-color: #9999ff;">1.3934</td>
+                        <td style="background-color: #ff9999;">-5.3217</td>
+                        <td style="background-color: #9999ff;">1.4553</td>
+                    </tr>
+                    <tr>
+                        <th>herbivores</th>
+                        <td style="background-color: #9999ff;">4.9230</td>
+                        <td style="background-color: #ff9999;">-3.4498</td>
+                        <td style="background-color: #ff9999;">-2.8003</td>
+                        <td style="background-color: #ff9999;">-2.8773</td>
+                        <td style="background-color: #ff9999;">-2.8303</td>
+                    </tr>
+                    <tr>
+                        <th>sheep</th>
+                        <td style="background-color: #ff9999;">-5.1692</td>
+                        <td style="background-color: #9999ff;">3.9837</td>
+                        <td style="background-color: #ff9999;">-3.2771</td>
+                        <td style="background-color: #ff9999;">-3.3501</td>
+                        <td style="background-color: #ff9999;">-2.6211</td>
+                    </tr>
+                    <tr>
+                        <th>slow</th>
+                        <td style="background-color: #9999ff;">5.1529</td>
+                        <td style="background-color: #ff9999;">-2.4297</td>
+                        <td style="background-color: #ff9999;">-2.5776</td>
+                        <td style="background-color: #ff9999;">-2.4191</td>
+                        <td style="background-color: #ff9999;">-2.9745</td>
+                    </tr>
+                </tbody>
+            </table>
         </article>
 
         <footer>

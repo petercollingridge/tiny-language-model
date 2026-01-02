@@ -44,7 +44,7 @@ class BigramLanguageModel(nn.Module):
         return tokens
 
     def output_embeddings(self):
-        return self.token_embedding_table.weight  # (vocab_size, vocab_size)
+        return self.token_embedding_table.weight.detach().cpu()  # (vocab_size, vocab_size)
 
 
 class BigramLanguageModelWithPositionalEncoding(nn.Module):

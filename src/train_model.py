@@ -1,5 +1,5 @@
 from BigramModel import BigramLanguageModel, BigramLanguageModelWithPositionalEncoding
-from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model
+from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model, write_output
 from tokeniser import Tokeniser, SimpleWordTokeniser
 
 
@@ -30,10 +30,22 @@ def bigram_model(folder, tokeniser=Tokeniser, include_positions=False):
 
     # Generate some text
     max_new_tokens = min(20, tokeniser.block_size)
+    print("Example generated text:")
     generate_text(model, tokeniser, n = 10, max_new_tokens = max_new_tokens)
 
-    print(model.output_embeddings())
+    output = f"vocab = {tokeniser.vocab}\n"
+    output += f"embeddings = {model.output_embeddings()}\n"
+    write_output(folder, "model_output.txt", output)
+
+    print(type(model.output_embeddings()))
+
+def example1():
+    """
+    Training a bigram model on two sentences.
+    """
+
+    bigram_model("example1", tokeniser=SimpleWordTokeniser)
 
 
 if __name__ == "__main__":
-    bigram_model("example1", tokeniser=SimpleWordTokeniser)
+    example1()
