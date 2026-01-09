@@ -39,44 +39,28 @@ header h1 {
     font-weight: 700;
 }
 
-.article-page header h1 {
-    font-size: 2rem;
-    font-weight: 600;
-}
-
 header p {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    font-style: italic;
     color: #eee;
 }
 
 /* Navigation Styles */
-nav {
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 2rem;
-}
-
 nav ul {
     list-style: none;
     display: flex;
-    justify-content: center;
-    gap: 2rem;
+    justify-content: space-between;
 }
 
 nav a {
     text-decoration: none;
     color: #667eea;
     font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
     transition: all 0.3s ease;
 }
 
 nav a:hover {
-    background-color: #667eea;
-    color: white;
+    text-decoration: underline;
 }
 
 /* Blog Post Styles (for blog listing page) */
@@ -132,7 +116,7 @@ nav a:hover {
 /* Article Styles (for individual article pages) */
 .article {
     background: white;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     margin-bottom: 2rem;
@@ -141,7 +125,7 @@ nav a:hover {
 .article-meta {
     color: #666;
     font-size: 0.9rem;
-    margin-bottom: 2rem;
+    margin-bottom: 0.25rem;
     padding-bottom: 1rem;
     border-bottom: 2px solid #eee;
 }
@@ -152,6 +136,7 @@ nav a:hover {
     font-size: 2.5rem;
     font-weight: 700;
     line-height: 1.2;
+    text-align: center;
 }
 
 .article-content {
@@ -180,6 +165,10 @@ nav a:hover {
 .article-content ul {
     margin-bottom: 1.5rem;
     padding-left: 2rem;
+}
+
+.article-content table {
+    margin: 1rem auto;
 }
 
 .article-content table td {
@@ -211,7 +200,6 @@ nav a:hover {
 .article-content table .label-v {
     border-right: 1px solid #ccc;
 }
-
 
 /* Code Block Styles */
 .code-block {
