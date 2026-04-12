@@ -1,4 +1,6 @@
-from BigramModel import BigramLanguageModel, BigramLanguageModelWithPositionalEncoding
+import sys
+
+from BigramModel import BigramModel, BigramModelWithPositionalEncoding, DeeperBigramModel
 from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model, write_output
 from tokeniser import Tokeniser, SimpleWordTokeniser
 
@@ -6,7 +8,7 @@ from tokeniser import Tokeniser, SimpleWordTokeniser
 def bigram_model(folder, tokeniser=Tokeniser, include_positions=False):
     """ Train a bigram language model on the given text file """
 
-    text = get_text(folder, "sentences.txt")
+    text = get_text(folder, "training_sentences.txt")
     seqs = get_seqs(text)
     tokeniser = tokeniser(seqs)
 
@@ -22,9 +24,9 @@ def bigram_model(folder, tokeniser=Tokeniser, include_positions=False):
 
     # Create model
     if include_positions:
-        model = BigramLanguageModelWithPositionalEncoding(tokeniser.vocab_size, tokeniser.block_size, n_embed=8)
+        model = BigramModelWithPositionalEncoding(tokeniser.vocab_size, tokeniser.block_size, n_embed=8)
     else:
-        model = BigramLanguageModel(tokeniser.vocab_size)
+        model = BigramModel(tokeniser.vocab_size)
 
     run_model(model, get_batch)
 
@@ -39,6 +41,7 @@ def bigram_model(folder, tokeniser=Tokeniser, include_positions=False):
 
     print(type(model.output_embeddings()))
 
+
 def example1():
     """
     Training a bigram model on two sentences.
@@ -47,5 +50,39 @@ def example1():
     bigram_model("example1", tokeniser=SimpleWordTokeniser)
 
 
+def example2():
+    """
+    Training a bigram model on two sentences, with a hidden layer
+    """
+
+    folder = "example2"
+    tokeniser=SimpleWordTokeniser
+
+    text = get_text(folder, "training_sentences.txt")
+    seqs = get_seqs(text)
+    tokeniser = tokeniser(seqs)
+
+    print(tokeniser.vocab_size, tokeniser.block_size)
+
+    # Function to get batches of training data
+    encoded_seqs = [tokeniser.encode(seq) for seq in seqs]
+    # get_batch = get_all_seqs(encoded_seqs)
+    get_batch = get_random_seqs(encoded_seqs, batch_size=8)
+
+    x, y = get_batch()
+    print(x.shape, y.shape)
+
+    model = DeeperBigramModel(tokeniser.vocab_size)
+    run_model(model, get_batch)
+
+
 if __name__ == "__main__":
-    example1()
+    # Get value from command line argument to decide which example to run
+    if len(sys.argv) > 1:
+        example_name = sys.argv[1]
+        if example_name == "example1":
+            example1()
+        elif example_name == "example2":
+            example2()
+        else:
+            print(f"Unknown example: {example_name}")
