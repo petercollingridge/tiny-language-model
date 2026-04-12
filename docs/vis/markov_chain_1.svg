@@ -1,0 +1,45 @@
+<svg viewBox="0 0 620 160" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  .node {
+    fill: none;
+    stroke: #aaa;
+    stroke-width: 1;
+  }
+  .node-label {
+    dominant-baseline: hanging;
+    text-anchor: middle;
+  }
+  .edge {
+    stroke: #aaa;
+    stroke-width: 2;
+    opacity: 0.8;
+    marker-end: url(#arrow);
+  }
+  </style>
+
+    <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" orient="auto-start-reverse">
+            <path d="M0 0L10 5L0 10z" fill="#aaa"/>
+        </marker>
+    </defs>
+    <rect fill="#eee" stroke="#ccc" x="0" y="0" width="620" height="160"/>
+    <circle class="node" cx="30" cy="70" r="20"/>
+    <text x="30" y="95" class="node-label">&lt;BR&gt;</text>
+    <line x1="52" y1="70" x2="146" y2="70" class="edge"/>
+    <circle class="node" cx="170" cy="70" r="20"/>
+    <text x="170" y="95" class="node-label">sheep</text>
+    <line x1="192" y1="70" x2="286" y2="70" class="edge"/>
+    <circle class="node" cx="310" cy="70" r="20"/>
+    <text x="310" y="95" class="node-label">are</text>
+    <line x1="331.2" y1="64" x2="426" y2="36.9" class="edge"/>
+    <line x1="331.2" y1="76" x2="426" y2="103.1" class="edge"/>
+    <circle class="node" cx="450" cy="30" r="20"/>
+    <text x="450" y="55" class="node-label">slow</text>
+    <circle class="node" cx="450" cy="110" r="20"/>
+    <text x="450" y="135" class="node-label">herbivores</text>
+    <line x1="471.2" y1="36" x2="566" y2="63.1" class="edge"/>
+    <line x1="471.2" y1="104" x2="566" y2="76.9" class="edge"/>
+    <circle class="node" cx="590" cy="70" r="20"/>
+    <text x="590" y="95" class="node-label">&lt;BR&gt;</text>
+</svg>

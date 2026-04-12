@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="600">
+
+<style>
+    .activation { display: none; pointer-events: none; }
+    .click-box {fill-opacity: 0;}
+    .edge { stroke-width: 2; }
+    .node { fill: #ccc; stroke: white; stroke-width: 2; }
+    .node-activation { stroke: white; stroke-width: 0.5; }
+    text { font-family: sans-serif; font-size: 12px; fill: black; alignment-baseline: middle; text-anchor: middle; }
+</style>
+  <circle class="node" cx="60" cy="300.0" r="40" />
+  <text x="60" y="300.0">&lt;&gt;</text>
+  <circle class="node" cx="240" cy="300.0" r="40" />
+  <text x="240" y="300.0">sheep</text>
+  <circle class="node" cx="420" cy="140.0" r="40" />
+  <text x="420" y="140.0">are</text>
+  <circle class="node" cx="420" cy="300.0" r="40" />
+  <text x="420" y="300.0">eat</text>
+  <circle class="node" cx="420" cy="460.0" r="40" />
+  <text x="420" y="460.0">like</text>
+  <circle class="node" cx="600" cy="60.0" r="40" />
+  <text x="600" y="60.0">herbivores</text>
+  <circle class="node" cx="600" cy="220.0" r="40" />
+  <text x="600" y="220.0">meek</text>
+  <circle class="node" cx="600" cy="380.0" r="40" />
+  <text x="600" y="380.0">grass</text>
+  <circle class="node" cx="600" cy="540.0" r="40" />
+  <text x="600" y="540.0">jumping</text>
+</svg>

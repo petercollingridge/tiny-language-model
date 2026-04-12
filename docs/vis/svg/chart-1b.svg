@@ -1,0 +1,22 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+<line x1="10" y1="100.0" x2="190" y2="100.0" stroke="black"/>
+<line x1="100.0" y1="10" x2="100.0" y2="190" stroke="black"/>
+<path d="M58.91225582140079 156.3686810924562l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="66.91225582140079" y="154.3686810924562" font-size="12" fill="black">&lt;&gt;</text>
+<path d="M175.62390777254222 103.13202799762112l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="183.62390777254222" y="101.13202799762112" font-size="12" fill="black">are</text>
+<path d="M183.99162816231302 18.200420879271718l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="191.99162816231302" y="16.200420879271718" font-size="12" fill="black">eat</text>
+<path d="M123.87222654284275 165.81650578709l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="131.87222654284275" y="163.81650578709" font-size="12" fill="black">grass</text>
+<path d="M123.87222654284275 165.81650578709l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="131.87222654284275" y="163.81650578709" font-size="12" fill="black">herbivores</text>
+<path d="M123.87222654284275 165.81650578709l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="131.87222654284275" y="163.81650578709" font-size="12" fill="black">jumping</text>
+<path d="M44.087240953383045 7.0l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="52.087240953383045" y="5.0" font-size="12" fill="black">like</text>
+<path d="M123.87222654284275 165.81650578709l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="131.87222654284275" y="163.81650578709" font-size="12" fill="black">meek</text>
+<path d="M23.10000457477469 71.11866965551947l7 7m0 -7l-7 7" fill="none" stroke="red"/>
+<text x="31.10000457477469" y="69.11866965551947" font-size="12" fill="black">sheep</text>
+</svg>

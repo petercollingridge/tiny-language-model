@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 755 180">
+	<style>
+		text.token {
+			font-size: 17px;
+			alignment-baseline: middle;
+		}
+		#input-tokens text {
+			text-anchor: end;
+			cursor: pointer;
+		}
+		#input-tokens text:hover,
+		#input-tokens text.active,
+		#output-tokens text.active,
+		#soft-max-vector text.active {
+			fill: rgb(255, 0, 175);
+		}
+		.matrix path {
+			fill: none;
+			stroke: #aaa;
+			stroke-width: 2;
+		}
+		.matrix text {
+			font-size: 12px;
+			font-family: monospace;
+			text-anchor: middle;
+			alignment-baseline: middle;
+		}
+		.matrix text.positive {
+			fill: rgb(45, 125, 122);
+		}
+		.matrix-row {
+			opacity: 0.25;
+		}
+		.matrix-row.active-row {
+			opacity: 1;
+		}
+		path.arrow {
+			stroke: #111;
+			fill: none;
+			mitrelimit: 20;
+			stroke-width: 2;
+		}
+	</style>
+	<rect fill="#eee" stroke="#ccc" x="0" y="0" width="755" height="180"/>
+
+	<g id="input-tokens" class="tokens" transform="translate(60, 10)">
+		<text x="20" y="20" class="active">&lt;BR&gt;</text>
+		<text x="20" y="50">are</text>
+		<text x="20" y="80">herbivores</text>
+		<text x="20" y="110">sheep</text>
+		<text x="20" y="140">slow</text>
+	</g>
+
+	<g id="input-vector" class="matrix" transform="translate(95, 10)">
+		<path d="M 10 0h-10v160h10"/>
+		<path d="M 20 0h10v160h-10"/>
+		<text x="15" y="20">1</text>
+		<text x="15" y="50">0</text>
+		<text x="15" y="80">0</text>
+		<text x="15" y="110">0</text>
+		<text x="15" y="140">0</text>
+	</g>
+	<g class="matrix" transform="translate(135, 10)">
+		<path d="M 10 0h-10v160h10"/>
+		<path d="M 290 0h10v160h-10"/>
+
+		<g class="matrix-row active-row">
+			<text x="30" y="20">-4.049</text>
+			<text x="90" y="20">-3.734</text>
+			<text x="150" y="20">-3.085</text>
+			<text x="210" y="20" class="positive">4.246</text>
+			<text x="270" y="20">-4.011</text>
+		</g>
+
+		<g class="matrix-row">
+			<text x="30" y="50">-4.285</text>
+			<text x="90" y="50">-4.831</text>
+			<text x="150" y="50" class="positive">1.393</text>
+			<text x="210" y="50">-5.322</text>
+			<text x="270" y="50" class="positive">1.455</text>
+		</g>
+
+		<g class="matrix-row">
+			<text x="30" y="80" class="positive">4.923</text>
+			<text x="90" y="80">-3.45</text>
+			<text x="150" y="80">-2.8</text>
+			<text x="210" y="80">-2.877</text>
+			<text x="270" y="80">-2.83</text>
+		</g>
+
+		<g class="matrix-row">
+			<text x="30" y="110">-5.169</text>
+			<text x="90" y="110" class="positive">3.984</text>
+			<text x="150" y="110">-3.277</text>
+			<text x="210" y="110">-3.35</text>
+			<text x="270" y="110">-2.621</text>
+		</g>
+
+		<g class="matrix-row">
+			<text x="30" y="140" class="positive">5.153</text>
+			<text x="90" y="140">-2.43</text>
+			<text x="150" y="140">-2.578</text>
+			<text x="210" y="140">-2.419</text>
+			<text x="270" y="140">-2.975</text>
+		</g>
+	</g>
+
+	<g id="output-vector" class="matrix" transform="translate(450, 10)">
+		<text y="80">=</text>
+		<path d="M25 0h-10v160h10"/>
+		<path d="M65 0h10v160h-10"/>
+		<text x="45" y="20">-4.049</text>
+		<text x="45" y="50">-3.734</text>
+		<text x="45" y="80">-3.085</text>
+		<text x="45" y="110" class="positive">4.246</text>
+		<text x="45" y="140">-4.011</text>
+	</g>
+
+	<path class="arrow" d="M540 90h40m-10 -5l10 5-10 5"/>
+
+	<g id="soft-max-vector" class="matrix" transform="translate(580, 10)">
+		<path d="M25 0h-10v160h10"/>
+		<path d="M65 0h10v160h-10"/>
+		<text x="45" y="20">0.000</text>
+		<text x="45" y="50">0.000</text>
+		<text x="45" y="80">0.001</text>
+		<text x="45" y="110" class="active">0.998</text>
+		<text x="45" y="140">0.001</text>
+	</g>
+
+	<g id="output-tokens" class="tokens" transform="translate(650, 10)">
+		<text x="20" y="20">&lt;BR&gt;</text>
+		<text x="20" y="50">are</text>
+		<text x="20" y="80">herbivores</text>
+		<text x="20" y="110" class="active">sheep</text>
+		<text x="20" y="140">slow</text>
+	</g>
+
+	<script>
+		const inputTokens = document.querySelectorAll('#input-tokens text');
+		const inputVector = document.querySelectorAll('#input-vector text');
+		const matrixRows = document.querySelectorAll('.matrix-row');
+		const outputVector = document.querySelectorAll('#output-vector text:not(:first-child)');
+		const softMaxVector = document.querySelectorAll('#soft-max-vector text');
+		const outputTokens = document.querySelectorAll('#output-tokens text');
+
+		function selectToken(i) {
+				inputTokens.forEach(t => t.classList.remove('active'));
+				inputTokens[i].classList.add('active');
+				matrixRows.forEach(row => row.classList.remove('active-row'));
+				matrixRows[i].classList.add('active-row');
+
+				// Update input vector
+				inputVector.forEach((textElement, j) => {
+					textElement.textContent = (i === j) ? '1' : '0';
+				});
+
+				// Update output vector
+				const matrixValues = Array.from(matrixRows[i].querySelectorAll('text')).map(t => t.textContent);
+				const expValues = matrixValues.map(v => Math.exp(parseFloat(v)));
+				const sumExp = expValues.reduce((a, b) => a + b, 0);
+				const softMaxValues = expValues.map(v => (v / sumExp).toFixed(3));
+
+				outputVector.forEach((textElement, j) => {
+					textElement.textContent = matrixValues[j];
+					textElement.classList.toggle('positive', parseFloat(matrixValues[j]) > 0);
+					softMaxVector[j].textContent = softMaxValues[j];
+					softMaxVector[j].classList.toggle('active', parseFloat(softMaxValues[j]) > 0.25);
+					outputTokens[j].classList.toggle('active', parseFloat(softMaxValues[j]) > 0.25);
+				});
+		}
+
+		inputTokens.forEach((text, i) => {
+			text.addEventListener('click', () => selectToken(i));
+		});
+	</script>
+</svg>

@@ -1,0 +1,457 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="420">
+<style>
+    .activation { display: none; pointer-events: none; }
+    .click-box {fill-opacity: 0;}
+    .edge { stroke-width: 2; }
+    .node { fill: #ccc; stroke: white; stroke-width: 2; }
+    .node-activation { stroke: white; stroke-width: 0.5; }
+    text { font-family: sans-serif; font-size: 12px; fill: black; alignment-baseline: middle; }
+</style>
+<g class="weights">
+	<line class="edge" x1="120" y1="30.0" x2="270" y2="180.0" stroke="blue" opacity="0.88"/>
+	<line class="edge" x1="120" y1="90.0" x2="270" y2="180.0" stroke="blue" opacity="0.69"/>
+	<line class="edge" x1="120" y1="150.0" x2="270" y2="180.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="120" y1="210.0" x2="270" y2="180.0" stroke="red" opacity="0.95"/>
+	<line class="edge" x1="120" y1="270.0" x2="270" y2="180.0" stroke="red" opacity="0.95"/>
+	<line class="edge" x1="120" y1="330.0" x2="270" y2="180.0" stroke="red" opacity="0.95"/>
+	<line class="edge" x1="120" y1="390.0" x2="270" y2="180.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="120" y1="30.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="120" y1="90.0" x2="270" y2="240.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="120" y1="150.0" x2="270" y2="240.0" stroke="blue" opacity="0.16"/>
+	<line class="edge" x1="120" y1="210.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="120" y1="270.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="120" y1="330.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="120" y1="390.0" x2="270" y2="240.0" stroke="blue" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.92"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.70"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.70"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="1.00"/>
+</g>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<circle class="node" cx="270" cy="180.0" r="20" />
+	<circle class="node" cx="270" cy="240.0" r="20" />
+	<circle class="node" cx="420" cy="30.0" r="20" />
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<circle class="node" cx="420" cy="390.0" r="20" />
+	<text x="95" y="30.0" text-anchor="end">&lt;&gt;</text>
+	<text x="95" y="90.0" text-anchor="end">are</text>
+	<text x="95" y="150.0" text-anchor="end">eat</text>
+	<text x="95" y="210.0" text-anchor="end">grass</text>
+	<text x="95" y="270.0" text-anchor="end">herbivores</text>
+	<text x="95" y="330.0" text-anchor="end">meek</text>
+	<text x="95" y="390.0" text-anchor="end">sheep</text>
+	<text x="445" y="30.0" >&lt;&gt;</text>
+	<text x="445" y="90.0" >are</text>
+	<text x="445" y="150.0" >eat</text>
+	<text x="445" y="210.0" >grass</text>
+	<text x="445" y="270.0" >herbivores</text>
+	<text x="445" y="330.0" >meek</text>
+	<text x="445" y="390.0" >sheep</text>
+	<rect id="click-box-0" class="click-box" x="40" width="100" height="40" y="10.0" />
+	<rect id="click-box-1" class="click-box" x="40" width="100" height="40" y="70.0" />
+	<rect id="click-box-2" class="click-box" x="40" width="100" height="40" y="130.0" />
+	<rect id="click-box-3" class="click-box" x="40" width="100" height="40" y="190.0" />
+	<rect id="click-box-4" class="click-box" x="40" width="100" height="40" y="250.0" />
+	<rect id="click-box-5" class="click-box" x="40" width="100" height="40" y="310.0" />
+	<rect id="click-box-6" class="click-box" x="40" width="100" height="40" y="370.0" /><g id="activation-0" class="activation">
+	<line class="edge" x1="120" y1="30.0" x2="270" y2="180.0" stroke="blue" opacity="0.88"/>
+	<line class="edge" x1="120" y1="30.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.12"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.10"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="0.12"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.06"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.60"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="0.14"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.61"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="0.14"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="0.13"/>
+	<g transform="translate(120 30.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<g transform="translate(270 180.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="16.3" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.82</text>
+</g>
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="0.8" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.04</text>
+</g>
+	<circle class="node" cx="420" cy="30.0" r="20" />
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<g transform="translate(420 390.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+</g><g id="activation-1" class="activation">
+	<line class="edge" x1="120" y1="90.0" x2="270" y2="180.0" stroke="blue" opacity="0.69"/>
+	<line class="edge" x1="120" y1="90.0" x2="270" y2="240.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.92"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.55"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.56"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="1.00"/>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<g transform="translate(120 90.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<g transform="translate(270 180.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="14.6" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.73</text>
+</g>
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="19.9" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="420" cy="30.0" r="20" />
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<g transform="translate(420 270.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="10.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.50</text>
+</g>
+	<g transform="translate(420 330.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="10.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.50</text>
+</g>
+	<circle class="node" cx="420" cy="390.0" r="20" />
+</g><g id="activation-2" class="activation">
+	<line class="edge" x1="120" y1="150.0" x2="270" y2="180.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="120" y1="150.0" x2="270" y2="240.0" stroke="blue" opacity="0.16"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.98"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.89"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.69"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.70"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="1.00"/>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<g transform="translate(120 150.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<g transform="translate(270 180.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="19.9" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="18.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.90</text>
+</g>
+	<circle class="node" cx="420" cy="30.0" r="20" />
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<g transform="translate(420 210.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<circle class="node" cx="420" cy="390.0" r="20" />
+</g><g id="activation-3" class="activation">
+	<line class="edge" x1="120" y1="210.0" x2="270" y2="180.0" stroke="red" opacity="0.95"/>
+	<line class="edge" x1="120" y1="210.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="0.73"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.22"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="0.64"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.18"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="0.59"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="0.23"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="0.76"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.12"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.13"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="0.27"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.13"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="0.27"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="0.63"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="0.25"/>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<g transform="translate(120 210.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<g transform="translate(270 180.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="3.1" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.16</text>
+</g>
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="1.5" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.08</text>
+</g>
+	<g transform="translate(420 30.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<circle class="node" cx="420" cy="390.0" r="20" />
+</g><g id="activation-4" class="activation">
+	<line class="edge" x1="120" y1="270.0" x2="270" y2="180.0" stroke="red" opacity="0.95"/>
+	<line class="edge" x1="120" y1="270.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="0.73"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.22"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="0.64"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.18"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="0.59"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="0.23"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="0.76"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.12"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.13"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="0.27"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.13"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="0.27"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="0.63"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="0.25"/>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<g transform="translate(120 270.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<g transform="translate(270 180.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="3.1" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.16</text>
+</g>
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="1.5" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.08</text>
+</g>
+	<g transform="translate(420 30.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<circle class="node" cx="420" cy="390.0" r="20" />
+</g><g id="activation-5" class="activation">
+	<line class="edge" x1="120" y1="330.0" x2="270" y2="180.0" stroke="red" opacity="0.95"/>
+	<line class="edge" x1="120" y1="330.0" x2="270" y2="240.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="0.73"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.22"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="0.64"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.18"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="0.59"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="0.23"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="0.76"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.12"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="270.0" stroke="blue" opacity="0.13"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="0.27"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="330.0" stroke="blue" opacity="0.13"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="0.27"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="0.63"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="0.25"/>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<g transform="translate(120 330.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="120" cy="390.0" r="20" />
+	<g transform="translate(270 180.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="3.1" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.16</text>
+</g>
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="1.5" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.08</text>
+</g>
+	<g transform="translate(420 30.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="420" cy="90.0" r="20" />
+	<circle class="node" cx="420" cy="150.0" r="20" />
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<circle class="node" cx="420" cy="390.0" r="20" />
+</g><g id="activation-6" class="activation">
+	<line class="edge" x1="120" y1="390.0" x2="270" y2="180.0" stroke="red" opacity="1.00"/>
+	<line class="edge" x1="120" y1="390.0" x2="270" y2="240.0" stroke="blue" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="30.0" stroke="red" opacity="0.03"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="30.0" stroke="red" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="90.0" stroke="red" opacity="0.02"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="90.0" stroke="blue" opacity="0.99"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="150.0" stroke="red" opacity="0.02"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="150.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="210.0" stroke="blue" opacity="0.03"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="210.0" stroke="blue" opacity="0.92"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="270.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="330.0" stroke="blue" opacity="1.00"/>
+	<line class="edge" x1="270" y1="180.0" x2="420" y2="390.0" stroke="blue" opacity="0.02"/>
+	<line class="edge" x1="270" y1="240.0" x2="420" y2="390.0" stroke="red" opacity="1.00"/>
+	<circle class="node" cx="120" cy="30.0" r="20" />
+	<circle class="node" cx="120" cy="90.0" r="20" />
+	<circle class="node" cx="120" cy="150.0" r="20" />
+	<circle class="node" cx="120" cy="210.0" r="20" />
+	<circle class="node" cx="120" cy="270.0" r="20" />
+	<circle class="node" cx="120" cy="330.0" r="20" />
+	<g transform="translate(120 390.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="20.0" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">1.00</text>
+</g>
+	<circle class="node" cx="270" cy="180.0" r="20" />
+	<g transform="translate(270 240.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="19.8" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.99</text>
+</g>
+	<circle class="node" cx="420" cy="30.0" r="20" />
+	<g transform="translate(420 90.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="13.3" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.67</text>
+</g>
+	<g transform="translate(420 150.0)">
+            <circle class="node" cx="0" cy="0" r="20" />
+            <circle class="node-activation" cx="0" cy="0" r="6.7" fill="#48f" />
+            <text x="0" y="0" text-anchor="middle">0.33</text>
+</g>
+	<circle class="node" cx="420" cy="210.0" r="20" />
+	<circle class="node" cx="420" cy="270.0" r="20" />
+	<circle class="node" cx="420" cy="330.0" r="20" />
+	<circle class="node" cx="420" cy="390.0" r="20" />
+</g>
+<script>
+	const clickBoxes = document.querySelectorAll('.click-box');
+	const activations = document.querySelectorAll('.activation');
+	const weights = document.querySelector('.weights');
+	let selectedBox = -1;
+
+	const selectBox = (i) => {
+		selectedBox = i;
+		activations[i].style.display = 'block';
+		weights.style.display = 'none';
+	};
+
+	clickBoxes.forEach((box, index) => {
+		const handleEvent = () => {
+			if (selectedBox === -1) {
+				selectBox(index);
+			} else if (selectedBox === index) {
+				// Deselect the already selected box
+				activations[index].style.display = 'none';
+				weights.style.display = 'block';
+				selectedBox = -1;
+			} else {
+				// Deselect the previously selected box and select the new one
+				activations[selectedBox].style.display = 'none';
+				selectBox(index);
+			}
+		};
+
+		box.addEventListener('click', handleEvent);
+		box.addEventListener('touchstart', (e) => {
+			e.preventDefault(); // Prevents touch from triggering click
+			handleEvent();
+		});
+	});
+</script>
+</svg>
