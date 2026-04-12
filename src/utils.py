@@ -72,6 +72,8 @@ def run_model(model, get_batch, steps=10000):
     # create a PyTorch optimizer
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
+    inputs, targets = get_batch()
+
     for step in range(steps):
         # Get a batch of data
         inputs, targets = get_batch()
