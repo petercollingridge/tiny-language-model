@@ -3,8 +3,11 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class BigramLanguageModel(nn.Module):
-    """ Simple bigram model that predicts the next token based on the current token only """
+class BigramModel(nn.Module):
+    """
+    Simple bigram model that predicts the next token based on the current token only.
+    Consists of a single matrix of weights that map input nodes to output nodes.
+    """
 
     def __init__(self, vocab_size):
         super().__init__()
@@ -47,7 +50,37 @@ class BigramLanguageModel(nn.Module):
         return self.token_embedding_table.weight.detach().cpu()  # (vocab_size, vocab_size)
 
 
-class BigramLanguageModelWithPositionalEncoding(nn.Module):
+class DeeperBigramModel(nn.Module):
+    """
+    Simple bigram model that predicts the next token based on the current token only.
+    Has a single hidden later between the input and output nodes.
+    """
+
+    def __init__(self, vocab_size, hidden_size=2):
+        super().__init__()
+
+        self.model = nn.Sequential(
+            nn.Embedding(vocab_size, hidden_size),  # token ids -> vectors
+            nn.ReLU(),
+            nn.Linear(hidden_size, vocab_size)      # vectors -> logits over vocab
+        )
+        self.vocab_size = vocab_size
+
+    def forward(self, input_values, targets=None):
+        logits = self.model(input_values)
+
+        if targets is None:
+            loss = None
+        else:
+            loss = F.cross_entropy(
+                logits.reshape(-1, self.vocab_size),  # (B*T, vocab)
+                targets.reshape(-1)                   # (B*T,)
+            )
+
+        return logits, loss
+
+
+class BigramModelWithPositionalEncoding(nn.Module):
     """ More advanced bigram model that adds positional encoding and token embeddings """
 
     def __init__(self, vocab_size, block_size, n_embed):
