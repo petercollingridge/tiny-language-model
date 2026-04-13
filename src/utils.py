@@ -93,6 +93,7 @@ def run_model(model, get_batch, steps=10000):
 def generate_text(model, tokeniser, n = 5, max_new_tokens=20):
     """ Given a trained model and tokeniser, generate n sequences of text """
 
+    sequences = []
     for _ in range(n):
         # Start with the first token, which should be <BOS>
         first_token = torch.zeros((1, 1), dtype=torch.long)
@@ -100,7 +101,9 @@ def generate_text(model, tokeniser, n = 5, max_new_tokens=20):
 
         # Tokens is a (1, T) array of token indices, so get first item to reduce to list
         output = tokeniser.decode(tokens[0].tolist())
-        print(output)
+        sequences.append(output)
+
+    return sequences
 
 
 def write_output(folder, filename, output):

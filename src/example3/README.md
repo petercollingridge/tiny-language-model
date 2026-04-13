@@ -1,0 +1,1 @@
+In this example, we add more words to our vocabulary.

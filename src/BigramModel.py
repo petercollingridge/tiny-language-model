@@ -50,14 +50,14 @@ class BigramModel(nn.Module):
         return self.token_embedding_table.weight.detach().cpu()  # (vocab_size, vocab_size)
 
 
-class DeeperBigramModel(nn.Module):
+class DeeperBigramModel(BigramModel):
     """
     Simple bigram model that predicts the next token based on the current token only.
     Has a single hidden later between the input and output nodes.
     """
 
     def __init__(self, vocab_size, hidden_size=2):
-        super().__init__()
+        super().__init__(vocab_size)
 
         self.model = nn.Sequential(
             nn.Embedding(vocab_size, hidden_size),  # token ids -> vectors
