@@ -20,11 +20,14 @@ def get_batching_func(tokeniser, seqs):
     get_batch = get_random_seqs(encoded_seqs, batch_size=8)
     return get_batch
 
+
 def save_model(folder, model, tokeniser):
     """ Save the model's output embeddings and the tokeniser's vocabulary to a file. """
 
     output = f"tokens = {tokeniser.vocab}\n"
-    output += f"embeddings = {model.output_embeddings()}\n"
+    output += "weights:\n"
+    for weight in model.output_weights():
+        output += f"{weight}\n"
     write_output(folder, "model_output.txt", output)
 
 
@@ -39,18 +42,16 @@ def output_generated_text(folder, tokeniser, model, n=20):
     write_output(folder, "generated_sentences.txt", output)
 
 
-def run_example(folder, ModelClass):
+def run_example(folder, ModelClass, steps=10000):
     """
     Run an example of training a bigram model on two sentences.
     """
 
     seqs, tokeniser = get_tokeniser(folder, SimpleWordTokeniser)
-
-    # Create model
     model = ModelClass(tokeniser.vocab_size)
     get_batch = get_batching_func(tokeniser, seqs)
 
-    run_model(model, get_batch)
+    run_model(model, get_batch, steps=steps)
     save_model(folder, model, tokeniser)
     output_generated_text(folder, tokeniser, model)
 
@@ -67,16 +68,7 @@ def example2(folder):
     Training a bigram model with a hidden layer on two sentences.
     """
 
-    seqs, tokeniser = get_tokeniser(folder, SimpleWordTokeniser)
-
-    # Function to get batches of training data
-    encoded_seqs = [tokeniser.encode(seq) for seq in seqs]
-    # get_batch = get_all_seqs(encoded_seqs)
-    get_batch = get_random_seqs(encoded_seqs, batch_size=8)
-
-    model = DeeperBigramModel(tokeniser.vocab_size)
-    run_model(model, get_batch)
-    output_generated_text(folder, tokeniser, model)
+    run_example(folder, DeeperBigramModel, steps=20000)
 
 
 def example3(folder):

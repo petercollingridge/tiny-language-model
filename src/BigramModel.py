@@ -49,6 +49,9 @@ class BigramModel(nn.Module):
     def output_embeddings(self):
         return self.token_embedding_table.weight.detach().cpu()  # (vocab_size, vocab_size)
 
+    def output_weights(self):
+        return [self.token_embedding_table.weight.detach().cpu()]  # (vocab_size, vocab_size)
+
 
 class DeeperBigramModel(BigramModel):
     """
@@ -79,6 +82,9 @@ class DeeperBigramModel(BigramModel):
 
         return logits, loss
 
+    def output_weights(self):
+        """ Return all weights of of the model. """
+        return [param.detach().cpu() for param in self.model.parameters()]
 
 class BigramModelWithPositionalEncoding(nn.Module):
     """ More advanced bigram model that adds positional encoding and token embeddings """

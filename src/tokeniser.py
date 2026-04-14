@@ -80,7 +80,8 @@ class SimpleWordTokeniser(WordTokeniser):
         return [self.stoi[BR]] + encoded_text + [self.stoi[BR]]
 
     def decode(self, lst):
-        end = lst.index(self.stoi[BR], 1) if self.stoi[BR] in lst else len(lst)
-        lst = lst[1: end]  # remove BR and everything after BR
+        lst = lst[1:]  # remove initial BR
+        end = lst.index(self.stoi[BR]) if self.stoi[BR] in lst else len(lst)
+        lst = lst[: end]  # remove second BR and everything after it
         chars = [self.itos[i] for i in lst]
         return self.join_text(chars)
