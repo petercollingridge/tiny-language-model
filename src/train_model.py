@@ -76,13 +76,7 @@ def example3(folder):
     Same as example 2, but with more words.
     """
 
-    tokeniser = SimpleWordTokeniser
-
-    text = get_text(folder, "training_sentences.txt")
-    seqs = get_seqs(text)
-    tokeniser = tokeniser(seqs)
-
-    print(tokeniser.vocab_size, tokeniser.block_size)
+    run_example(folder, DeeperBigramModel, steps=50000)
 
 
 examples = {
