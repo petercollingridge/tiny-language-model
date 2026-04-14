@@ -68,7 +68,7 @@ def example2(folder):
     Training a bigram model with a hidden layer on two sentences.
     """
 
-    run_example(folder, DeeperBigramModel, steps=20000)
+    run_example(folder, DeeperBigramModel, steps=40000)
 
 
 def example3(folder):

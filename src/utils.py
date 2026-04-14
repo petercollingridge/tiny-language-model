@@ -73,6 +73,7 @@ def run_model(model, get_batch, steps=10000):
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
     inputs, targets = get_batch()
+    print_steps = int(steps / 10)
 
     for step in range(steps):
         # Get a batch of data
@@ -86,7 +87,7 @@ def run_model(model, get_batch, steps=10000):
         loss.backward()
         optimizer.step()
 
-        if step % 1000 == 0:
+        if step % print_steps == 0:
             print(f"Step {step}, loss {loss.item():.4f}")
 
 
