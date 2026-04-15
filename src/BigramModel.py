@@ -9,12 +9,15 @@ class BigramModel(nn.Module):
     Consists of a single matrix of weights that map input nodes to output nodes.
     """
 
-    def __init__(self, vocab_size):
+    def __init__(self):
         super().__init__()
-        self.token_embedding_table = nn.Embedding(vocab_size, vocab_size)
+        self.model = None
+
+    def build(self, vocab_size):
+        self.model = nn.Embedding(vocab_size, vocab_size)
 
     def forward(self, idx, targets=None):
-        logits = self.token_embedding_table(idx)  # (B, T, C)
+        logits = self.model(idx)  # (B, T, C)
 
         if targets is None:
             loss = None
@@ -47,10 +50,10 @@ class BigramModel(nn.Module):
         return tokens
 
     def output_embeddings(self):
-        return self.token_embedding_table.weight.detach().cpu()  # (vocab_size, vocab_size)
+        return self.model.weight.detach().cpu()  # (vocab_size, vocab_size)
 
     def output_weights(self):
-        return [self.token_embedding_table.weight.detach().cpu()]  # (vocab_size, vocab_size)
+        return [self.model.weight.detach().cpu()]  # (vocab_size, vocab_size)
 
 
 class DeeperBigramModel(BigramModel):
@@ -59,13 +62,16 @@ class DeeperBigramModel(BigramModel):
     Has a single hidden later between the input and output nodes.
     """
 
-    def __init__(self, vocab_size, hidden_size=2):
-        super().__init__(vocab_size)
+    def __init__(self, hidden_size=2):
+        super().__init__()
+        self.hidden_size = hidden_size
+        self.vocab_size = 0
 
+    def build(self, vocab_size):
         self.model = nn.Sequential(
-            nn.Embedding(vocab_size, hidden_size),  # token ids -> vectors
+            nn.Embedding(vocab_size, self.hidden_size),  # token ids -> vectors
             nn.ReLU(),
-            nn.Linear(hidden_size, vocab_size)      # vectors -> logits over vocab
+            nn.Linear(self.hidden_size, vocab_size)      # vectors -> logits over vocab
         )
         self.vocab_size = vocab_size
 

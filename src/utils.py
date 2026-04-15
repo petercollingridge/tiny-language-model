@@ -2,7 +2,7 @@ import os
 import torch
 
 
-LEARNING_RATE = 1e-3
+LEARNING_RATE = 5e-4
 
 
 def get_text(folder, filename):
@@ -112,3 +112,23 @@ def write_output(folder, filename, output):
 
     with open(os.path.join(folder, filename), 'w', encoding='utf-8') as f:
         f.write(output)
+
+
+def save_model(folder, steps, model, tokeniser):
+    """ Save the model's output embeddings and the tokeniser's vocabulary to a file. """
+
+    output = f"steps: {steps}\n"
+    output += "tokens: " + "|".join(tokeniser.vocab) + "\n"
+
+    for weights in model.output_weights():
+        output += "weights:\n"
+        for row in weights:
+            # If row is a 0-dim tensor, convert to scalar string.
+            # If row is a 1-d tensor, convert to comma-separated string.
+            if row.dim() == 0:
+                output += f"{row.item():.3f}"
+            else:
+                output += ",".join(f"{value.item():.3f}" for value in row)
+            output += "\n"
+
+    write_output(folder, "model_output.txt", output)

@@ -1,7 +1,7 @@
 import sys
 
 from BigramModel import BigramModel, DeeperBigramModel
-from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model, write_output
+from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model, write_output, save_model
 from tokeniser import Tokeniser, SimpleWordTokeniser
 
 
@@ -21,16 +21,6 @@ def get_batching_func(tokeniser, seqs):
     return get_batch
 
 
-def save_model(folder, model, tokeniser):
-    """ Save the model's output embeddings and the tokeniser's vocabulary to a file. """
-
-    output = f"tokens = {tokeniser.vocab}\n"
-    output += "weights:\n"
-    for weight in model.output_weights():
-        output += f"{weight}\n"
-    write_output(folder, "model_output.txt", output)
-
-
 def output_generated_text(folder, tokeniser, model, n=20):
     """
     Generate n sequences of text using the trained model and save to a file.
@@ -42,17 +32,17 @@ def output_generated_text(folder, tokeniser, model, n=20):
     write_output(folder, "generated_sentences.txt", output)
 
 
-def run_example(folder, ModelClass, steps=10000):
+def run_example(folder, model, steps=10000):
     """
     Run an example of training a bigram model on two sentences.
     """
 
     seqs, tokeniser = get_tokeniser(folder, SimpleWordTokeniser)
-    model = ModelClass(tokeniser.vocab_size)
+    model.build(tokeniser.vocab_size)
     get_batch = get_batching_func(tokeniser, seqs)
 
     run_model(model, get_batch, steps=steps)
-    save_model(folder, model, tokeniser)
+    save_model(folder, steps, model, tokeniser)
     output_generated_text(folder, tokeniser, model)
 
 
@@ -60,7 +50,9 @@ def example1(folder):
     """
     Training a bigram model on two sentences.
     """
-    run_example(folder, BigramModel)
+
+    model = BigramModel()
+    run_example(folder, model)
 
 
 def example2(folder):
@@ -68,7 +60,8 @@ def example2(folder):
     Training a bigram model with a hidden layer on two sentences.
     """
 
-    run_example(folder, DeeperBigramModel, steps=40000)
+    model = DeeperBigramModel()
+    run_example(folder, model, steps=10000)
 
 
 def example3(folder):
@@ -76,7 +69,8 @@ def example3(folder):
     Same as example 2, but with more words.
     """
 
-    run_example(folder, DeeperBigramModel, steps=50000)
+    model = DeeperBigramModel(4)
+    run_example(folder, model, steps=50000)
 
 
 examples = {
