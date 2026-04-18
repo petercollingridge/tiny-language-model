@@ -1,0 +1,95 @@
+<svg viewBox="0 0 450 280" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  .node circle {
+    fill: none;
+    stroke: #111;
+    stroke-width: 1;
+  }
+  .node text {
+    dominant-baseline: middle;
+  }
+  .input-node {
+    text-anchor: end;
+  }
+  .output-node {
+    text-anchor: start;
+  }
+  .edge line {
+    stroke: #aaa;
+    stroke-width: 2;
+    opacity: 0.8;
+  }
+  </style>
+
+    <rect fill="#f8f8f8" x="0" y="0" width="450" height="280"/>
+    <g class="node">
+        <g class="input-node">
+            <circle cx="105" cy="30" r="20"/>
+            <text x="80" y="30">&lt;BR&gt;</text>
+        </g>
+        <g class="input-node">
+            <circle cx="105" cy="85" r="20"/>
+            <text x="80" y="85">are</text>
+        </g>
+        <g class="input-node">
+            <circle cx="105" cy="140" r="20"/>
+            <text x="80" y="140">herbivores</text>
+        </g>
+        <g class="input-node">
+            <circle cx="105" cy="195" r="20"/>
+            <text x="80" y="195">sheep</text>
+        </g>
+        <g class="input-node">
+            <circle cx="105" cy="250" r="20"/>
+            <text x="80" y="250">slow</text>
+        </g>
+        <g class="output-node">
+            <circle cx="345" cy="30" r="20"/>
+            <text x="370" y="30">&lt;BR&gt;</text>
+        </g>
+        <g class="output-node">
+            <circle cx="345" cy="85" r="20"/>
+            <text x="370" y="85">are</text>
+        </g>
+        <g class="output-node">
+            <circle cx="345" cy="140" r="20"/>
+            <text x="370" y="140">herbivores</text>
+        </g>
+        <g class="output-node">
+            <circle cx="345" cy="195" r="20"/>
+            <text x="370" y="195">sheep</text>
+        </g>
+        <g class="output-node">
+            <circle cx="345" cy="250" r="20"/>
+            <text x="370" y="250">slow</text>
+        </g>
+    </g>
+    <g class="edge">
+        <line style="opacity: -3.39" x1="127" y1="30" x2="323" y2="30"/>
+        <line style="opacity: -2.49" x1="126.4" y1="34.9" x2="323.6" y2="80.1"/>
+        <line style="opacity: -3.86" x1="125" y1="39.2" x2="325" y2="130.8"/>
+        <line style="opacity: 1.95" x1="123.1" y1="42.5" x2="326.9" y2="182.5"/>
+        <line style="opacity: -3.34" x1="121.2" y1="44.9" x2="328.8" y2="235.1"/>
+        <line style="opacity: -1.89" x1="126.4" y1="80.1" x2="323.6" y2="34.9"/>
+        <line style="opacity: -4.73" x1="127" y1="85" x2="323" y2="85"/>
+        <line style="opacity: 1.93" x1="126.4" y1="89.9" x2="323.6" y2="135.1"/>
+        <line style="opacity: -3.29" x1="125" y1="94.2" x2="325" y2="185.8"/>
+        <line style="opacity: 1.95" x1="123.1" y1="97.5" x2="326.9" y2="237.5"/>
+        <line style="opacity: 2.54" x1="125" y1="130.8" x2="325" y2="39.2"/>
+        <line style="opacity: -4.67" x1="126.4" y1="135.1" x2="323.6" y2="89.9"/>
+        <line style="opacity: -2.05" x1="127" y1="140" x2="323" y2="140"/>
+        <line style="opacity: -3.78" x1="126.4" y1="144.9" x2="323.6" y2="190.1"/>
+        <line style="opacity: -3.24" x1="125" y1="149.2" x2="325" y2="240.8"/>
+        <line style="opacity: -2.23" x1="123.1" y1="182.5" x2="326.9" y2="42.5"/>
+        <line style="opacity: 4.39" x1="125" y1="185.8" x2="325" y2="94.2"/>
+        <line style="opacity: -2.25" x1="126.4" y1="190.1" x2="323.6" y2="144.9"/>
+        <line style="opacity: -2.88" x1="127" y1="195" x2="323" y2="195"/>
+        <line style="opacity: -1.18" x1="126.4" y1="199.9" x2="323.6" y2="245.1"/>
+        <line style="opacity: 3.11" x1="121.2" y1="235.1" x2="328.8" y2="44.9"/>
+        <line style="opacity: -2.94" x1="123.1" y1="237.5" x2="326.9" y2="97.5"/>
+        <line style="opacity: -1.78" x1="125" y1="240.8" x2="325" y2="149.2"/>
+        <line style="opacity: -1.96" x1="126.4" y1="245.1" x2="323.6" y2="199.9"/>
+        <line style="opacity: -2.82" x1="127" y1="250" x2="323" y2="250"/>
+    </g>
+</svg>
