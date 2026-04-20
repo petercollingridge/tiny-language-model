@@ -1,8 +1,6 @@
 import html
 import os
 
-from torch import layout
-
 from vis.draw_svg import SVG
 
 MARGIN_X = 85
@@ -10,6 +8,11 @@ MARGIN_Y = 10
 NODE_RADIUS = 20
 NODE_DX = 200
 NODE_DY = 15
+
+BLUE = [0, 63, 92]
+GREY = [200, 200, 200]
+YELLOW = [255, 166, 0]
+
 
 def parse_data(filename):
     with open(filename, 'r', encoding='utf-8') as f:
@@ -65,7 +68,7 @@ def get_network(layout, tokens, weights):
     return { 'nodes': nodes, 'edges': edges, 'layout': layout }
 
 
-def get_activation_pattern(network, n_tokens):
+def get_activation_pattern(network, layout):
     """
     Create a pattern of active nodes and edges based on the weights in the network.
     """
@@ -73,7 +76,8 @@ def get_activation_pattern(network, n_tokens):
     edges = network['edges']
     activation_patterns = []
 
-    for token in range(n_tokens):
+    # For each initial input token, calculate which nodes and edges are activated based on the weights.
+    for token in range(layout[0]):
         node_activations = [0] * len(nodes)
         edge_activations = [0] * len(edges)
         node_activations[token] = 1
@@ -82,7 +86,21 @@ def get_activation_pattern(network, n_tokens):
             if edge['node1'] == token:
                 edge_activations[i] = 1
                 node_activations[edge['node2']] += edge['weight']
-        
+
+        # Softmax the activations of the output layer nodes.
+        output_layer_start = sum(layout[:-1])
+        output_activations = node_activations[output_layer_start:]
+        max_activation = max(output_activations)
+        exp_activations = [pow(2.71828, a - max_activation) for a in output_activations]
+        sum_exp = sum(exp_activations)
+        if sum_exp > 0:
+            output_activations = [a / sum_exp for a in exp_activations]
+        else:
+            output_activations = [0] * len(output_activations)
+
+        for i, output_activation in enumerate(output_activations):
+            node_activations[output_layer_start + i] = round(output_activation, 2)
+
         activation_patterns.append({'nodes': node_activations, 'edges': edge_activations})
 
     return activation_patterns
@@ -92,28 +110,40 @@ def _add_styles(svg):
     svg.add_style('.node circle', {'fill': 'none', 'stroke': '#111', 'stroke-width': 1})
     svg.add_style('.node .active circle', {'fill': 'rgb(0, 63, 92)', 'stroke': 'rgb(0, 63, 92)', 'stroke-width': 1})
     svg.add_style('.node text', {'dominant-baseline': 'middle'})
+    svg.add_style('.node .active text', {'fill': 'rgb(255, 0, 175)'})
+    svg.add_style('.node .deactive text', {'fill': 'rgb(200, 200, 200)'})
     svg.add_style('.input-node', {'text-anchor': 'end'})
-    svg.add_style('.input-node.active text', {'fill': 'rgb(255, 0, 175)'})
-    svg.add_style('.input-node.deactive text', {'fill': 'rgb(200, 200, 200)'})
     svg.add_style('.output-node', {'text-anchor': 'start'})
-    svg.add_style('.edge line', {'stroke': '#aaa', 'stroke-width': 2, 'opacity': 0.8})
+    svg.add_style('.node text.activation-value', {
+        'text-anchor': 'middle',
+        'font-size': '10px',
+        'fill': '#fff',
+        'opacity': 0
+    })
+    svg.add_style('.output-node.deactive text', {'opacity': 0})
+    svg.add_style('.node .active text.activation-value', {'opacity': 1})
+    svg.add_style('.edge line', {'stroke-width': 2})
     svg.add_style('.hit-box', {'opacity': 0.05})
 
 
-def _add_script(svg, edges, filename):
+def _add_script(svg, activations, filename):
     filepath = os.path.join('js_scripts', filename)
     with open(filepath, 'r', encoding='utf-8') as f:
         script = f.read()
 
-    edge_code = 'const edges = ['
-    for edge in edges:
-        edge_code += f"[{edge['node1']}, {edge['node2']}, {edge['weight']}],"
-    edge_code += '];\n\n'
-
+    edge_code = f'const activations = {activations};\n\n'
     svg.add('script', {}, edge_code + html.escape(script))
 
 
-def draw_network_svg(token_list, network):
+def lerp_colour(weight, max_weight, colour1, colour2):
+    ratio = weight / max_weight if max_weight != 0 else 0
+    return [
+        int(colour1[i] + ratio * (colour2[i] - colour1[i]))
+        for i in range(3)
+    ]
+
+
+def draw_network_svg(token_list, layout, network):
     """ Draw a fully connected network of nodes representing the tokens in token_list. """
 
     n_tokens = len(token_list)
@@ -141,10 +171,10 @@ def draw_network_svg(token_list, network):
 
             node_group = nodes_group.add('g', {
                 'class': classname,
-                'id': f"node-{node['id']}",
                 'transform': f'translate({x},{y})'}
             )
             node_group.add('circle', {'r': NODE_RADIUS})
+            node_group.add('text', {'class': 'activation-value'}, 0)
             node_group.add('text', {'x': offset * (5 + NODE_RADIUS)}, html.escape(node['label']))
 
             if node['layer'] == 0:
@@ -152,30 +182,38 @@ def draw_network_svg(token_list, network):
                 rect_width = MARGIN_X + 2 * NODE_RADIUS + 2
                 node_group.rect(rect_x, -NODE_RADIUS - 1, rect_width, 2 * NODE_RADIUS + 2, classname = 'hit-box')
 
+    max_weight = max(edge['weight'] for edge in network['edges'])
+    min_weight = min(edge['weight'] for edge in network['edges'])
+
     for edge in network['edges']:
+        node1 = nodes[edge['node1']]
+        node2 = nodes[edge['node2']]
+        x1 = node1['x']
+        y1 = node1['y']
+        x2 = node2['x']
+        y2 = node2['y']
+        dx = x2 - x1
+        dy = y2 - y1
+        d = (dx ** 2 + dy ** 2) ** 0.5
+        if d > 0:
+            offset_x = dx / d * (NODE_RADIUS + 2)
+            offset_y = dy / d * (NODE_RADIUS + 2)
+            x1 += offset_x
+            y1 += offset_y
+            x2 -= offset_x
+            y2 -= offset_y
+        
         if edge['weight'] > 0:
-            node1 = nodes[edge['node1']]
-            node2 = nodes[edge['node2']]
-            x1 = node1['x']
-            y1 = node1['y']
-            x2 = node2['x']
-            y2 = node2['y']
-            dx = x2 - x1
-            dy = y2 - y1
-            d = (dx ** 2 + dy ** 2) ** 0.5
-            if d > 0:
-                offset_x = dx / d * (NODE_RADIUS + 2)
-                offset_y = dy / d * (NODE_RADIUS + 2)
-                x1 += offset_x
-                y1 += offset_y
-                x2 -= offset_x
-                y2 -= offset_y
-            edges_group.line(x1, y1, x2, y2, classname=f"edge-{edge['node1']}")
+            colour = lerp_colour(edge['weight'], max_weight, GREY, BLUE)
+        else:
+            colour = lerp_colour(-edge['weight'], -min_weight, GREY, YELLOW)
 
-    activations = get_activation_pattern(network, n_tokens)
-    print(activations)
+        stroke = f"rgb({colour[0]},{colour[1]},{colour[2]})"
+        edges_group.line(x1, y1, x2, y2, stroke=stroke, classname=f"edge-{edge['node1']}")
 
-    _add_script(svg, network['edges'], 'network_activation.js')
+    activations = get_activation_pattern(network, layout)
+    _add_script(svg, activations, 'network_activation.js')
+
     svg.write('network.svg')
 
 
@@ -186,7 +224,7 @@ def draw_network_1(folder):
     layout = [n, n]
 
     network = get_network(layout, data['tokens'], data['weights'])
-    draw_network_svg(data['tokens'], network)
+    draw_network_svg(data['tokens'], layout, network)
 
     print(network)
 

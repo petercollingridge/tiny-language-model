@@ -6,8 +6,19 @@
     stroke: #111;
     stroke-width: 1;
   }
+  .node .active circle {
+    fill: rgb(0, 63, 92);
+    stroke: rgb(0, 63, 92);
+    stroke-width: 1;
+  }
   .node text {
     dominant-baseline: middle;
+  }
+  .node .active text {
+    fill: rgb(255, 0, 175);
+  }
+  .node .deactive text {
+    fill: rgb(200, 200, 200);
   }
   .input-node {
     text-anchor: end;
@@ -15,81 +26,168 @@
   .output-node {
     text-anchor: start;
   }
+  .node text.activation-value {
+    text-anchor: middle;
+    font-size: 10px;
+    fill: #fff;
+    opacity: 0;
+  }
+  .output-node.deactive text {
+    opacity: 0;
+  }
+  .node .active text.activation-value {
+    opacity: 1;
+  }
   .edge line {
-    stroke: #aaa;
     stroke-width: 2;
-    opacity: 0.8;
+  }
+  .hit-box {
+    opacity: 0.05;
   }
   </style>
 
-    <rect fill="#f8f8f8" x="0" y="0" width="450" height="280"/>
+    <rect class="hit-box background" x="0" y="0" width="450" height="280"/>
     <g class="node">
-        <g class="input-node">
-            <circle cx="105" cy="30" r="20"/>
-            <text x="80" y="30">&lt;BR&gt;</text>
+        <g class="input-node" transform="translate(105,30)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">&lt;BR&gt;</text>
+            <rect class="hit-box" x="-105" y="-21" width="127" height="42"/>
         </g>
-        <g class="input-node">
-            <circle cx="105" cy="85" r="20"/>
-            <text x="80" y="85">are</text>
+        <g class="input-node" transform="translate(105,85)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">are</text>
+            <rect class="hit-box" x="-105" y="-21" width="127" height="42"/>
         </g>
-        <g class="input-node">
-            <circle cx="105" cy="140" r="20"/>
-            <text x="80" y="140">herbivores</text>
+        <g class="input-node" transform="translate(105,140)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">herbivores</text>
+            <rect class="hit-box" x="-105" y="-21" width="127" height="42"/>
         </g>
-        <g class="input-node">
-            <circle cx="105" cy="195" r="20"/>
-            <text x="80" y="195">sheep</text>
+        <g class="input-node" transform="translate(105,195)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">sheep</text>
+            <rect class="hit-box" x="-105" y="-21" width="127" height="42"/>
         </g>
-        <g class="input-node">
-            <circle cx="105" cy="250" r="20"/>
-            <text x="80" y="250">slow</text>
+        <g class="input-node" transform="translate(105,250)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">slow</text>
+            <rect class="hit-box" x="-105" y="-21" width="127" height="42"/>
         </g>
-        <g class="output-node">
-            <circle cx="345" cy="30" r="20"/>
-            <text x="370" y="30">&lt;BR&gt;</text>
+        <g class="output-node" transform="translate(345,30)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">&lt;BR&gt;</text>
         </g>
-        <g class="output-node">
-            <circle cx="345" cy="85" r="20"/>
-            <text x="370" y="85">are</text>
+        <g class="output-node" transform="translate(345,85)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">are</text>
         </g>
-        <g class="output-node">
-            <circle cx="345" cy="140" r="20"/>
-            <text x="370" y="140">herbivores</text>
+        <g class="output-node" transform="translate(345,140)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">herbivores</text>
         </g>
-        <g class="output-node">
-            <circle cx="345" cy="195" r="20"/>
-            <text x="370" y="195">sheep</text>
+        <g class="output-node" transform="translate(345,195)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">sheep</text>
         </g>
-        <g class="output-node">
-            <circle cx="345" cy="250" r="20"/>
-            <text x="370" y="250">slow</text>
+        <g class="output-node" transform="translate(345,250)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">slow</text>
         </g>
     </g>
     <g class="edge">
-        <line style="opacity: -3.39" x1="127" y1="30" x2="323" y2="30"/>
-        <line style="opacity: -2.49" x1="126.4" y1="34.9" x2="323.6" y2="80.1"/>
-        <line style="opacity: -3.86" x1="125" y1="39.2" x2="325" y2="130.8"/>
-        <line style="opacity: 1.95" x1="123.1" y1="42.5" x2="326.9" y2="182.5"/>
-        <line style="opacity: -3.34" x1="121.2" y1="44.9" x2="328.8" y2="235.1"/>
-        <line style="opacity: -1.89" x1="126.4" y1="80.1" x2="323.6" y2="34.9"/>
-        <line style="opacity: -4.73" x1="127" y1="85" x2="323" y2="85"/>
-        <line style="opacity: 1.93" x1="126.4" y1="89.9" x2="323.6" y2="135.1"/>
-        <line style="opacity: -3.29" x1="125" y1="94.2" x2="325" y2="185.8"/>
-        <line style="opacity: 1.95" x1="123.1" y1="97.5" x2="326.9" y2="237.5"/>
-        <line style="opacity: 2.54" x1="125" y1="130.8" x2="325" y2="39.2"/>
-        <line style="opacity: -4.67" x1="126.4" y1="135.1" x2="323.6" y2="89.9"/>
-        <line style="opacity: -2.05" x1="127" y1="140" x2="323" y2="140"/>
-        <line style="opacity: -3.78" x1="126.4" y1="144.9" x2="323.6" y2="190.1"/>
-        <line style="opacity: -3.24" x1="125" y1="149.2" x2="325" y2="240.8"/>
-        <line style="opacity: -2.23" x1="123.1" y1="182.5" x2="326.9" y2="42.5"/>
-        <line style="opacity: 4.39" x1="125" y1="185.8" x2="325" y2="94.2"/>
-        <line style="opacity: -2.25" x1="126.4" y1="190.1" x2="323.6" y2="144.9"/>
-        <line style="opacity: -2.88" x1="127" y1="195" x2="323" y2="195"/>
-        <line style="opacity: -1.18" x1="126.4" y1="199.9" x2="323.6" y2="245.1"/>
-        <line style="opacity: 3.11" x1="121.2" y1="235.1" x2="328.8" y2="44.9"/>
-        <line style="opacity: -2.94" x1="123.1" y1="237.5" x2="326.9" y2="97.5"/>
-        <line style="opacity: -1.78" x1="125" y1="240.8" x2="325" y2="149.2"/>
-        <line style="opacity: -1.96" x1="126.4" y1="245.1" x2="323.6" y2="199.9"/>
-        <line style="opacity: -2.82" x1="127" y1="250" x2="323" y2="250"/>
+        <line stroke="rgb(239,175,56)" class="edge-0" x1="127" y1="30" x2="323" y2="30"/>
+        <line stroke="rgb(228,182,94)" class="edge-0" x1="126.4" y1="34.9" x2="323.6" y2="80.1"/>
+        <line stroke="rgb(244,172,36)" class="edge-0" x1="125" y1="39.2" x2="325" y2="130.8"/>
+        <line stroke="rgb(111,139,152)" class="edge-0" x1="123.1" y1="42.5" x2="326.9" y2="182.5"/>
+        <line stroke="rgb(238,175,58)" class="edge-0" x1="121.2" y1="44.9" x2="328.8" y2="235.1"/>
+        <line stroke="rgb(222,186,119)" class="edge-1" x1="126.4" y1="80.1" x2="323.6" y2="34.9"/>
+        <line stroke="rgb(255,166,0)" class="edge-1" x1="127" y1="85" x2="323" y2="85"/>
+        <line stroke="rgb(112,139,152)" class="edge-1" x1="126.4" y1="89.9" x2="323.6" y2="135.1"/>
+        <line stroke="rgb(238,176,60)" class="edge-1" x1="125" y1="94.2" x2="325" y2="185.8"/>
+        <line stroke="rgb(111,139,152)" class="edge-1" x1="123.1" y1="97.5" x2="326.9" y2="237.5"/>
+        <line stroke="rgb(84,120,137)" class="edge-2" x1="125" y1="130.8" x2="325" y2="39.2"/>
+        <line stroke="rgb(254,166,2)" class="edge-2" x1="126.4" y1="135.1" x2="323.6" y2="89.9"/>
+        <line stroke="rgb(223,185,113)" class="edge-2" x1="127" y1="140" x2="323" y2="140"/>
+        <line stroke="rgb(244,172,39)" class="edge-2" x1="126.4" y1="144.9" x2="323.6" y2="190.1"/>
+        <line stroke="rgb(237,176,63)" class="edge-2" x1="125" y1="149.2" x2="325" y2="240.8"/>
+        <line stroke="rgb(225,183,105)" class="edge-3" x1="123.1" y1="182.5" x2="326.9" y2="42.5"/>
+        <line stroke="rgb(0,63,92)" class="edge-3" x1="125" y1="185.8" x2="325" y2="94.2"/>
+        <line stroke="rgb(226,183,104)" class="edge-3" x1="126.4" y1="190.1" x2="323.6" y2="144.9"/>
+        <line stroke="rgb(233,179,78)" class="edge-3" x1="127" y1="195" x2="323" y2="195"/>
+        <line stroke="rgb(213,191,150)" class="edge-3" x1="126.4" y1="199.9" x2="323.6" y2="245.1"/>
+        <line stroke="rgb(58,102,123)" class="edge-4" x1="121.2" y1="235.1" x2="328.8" y2="44.9"/>
+        <line stroke="rgb(234,178,75)" class="edge-4" x1="123.1" y1="237.5" x2="326.9" y2="97.5"/>
+        <line stroke="rgb(220,187,124)" class="edge-4" x1="125" y1="240.8" x2="325" y2="149.2"/>
+        <line stroke="rgb(222,185,117)" class="edge-4" x1="126.4" y1="245.1" x2="323.6" y2="199.9"/>
+        <line stroke="rgb(232,179,80)" class="edge-4" x1="127" y1="250" x2="323" y2="250"/>
     </g>
+    <script>const activations = [{'nodes': [1, 0, 0, 0, 0, 0.0, 0.01, 0.0, 0.98, 0.0], 'edges': [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 1, 0, 0, 0, 0.01, 0.0, 0.49, 0.0, 0.5], 'edges': [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 1, 0, 0, 0.98, 0.0, 0.01, 0.0, 0.0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 1, 0, 0.0, 0.99, 0.0, 0.0, 0.0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 0, 1, 0.98, 0.0, 0.01, 0.01, 0.0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]}];
+
+const background = document.querySelector(&#x27;.background&#x27;);
+const inputNodes = document.querySelectorAll(&#x27;.input-node&#x27;);
+const nodeElements = document.querySelectorAll(&#x27;.node &gt; *&#x27;);
+const activationElements = document.querySelectorAll(&#x27;.activation-value&#x27;);
+const edgeElements = document.querySelectorAll(&#x27;.edge line&#x27;);
+
+let selectedNode = -1;
+
+const deselectNodes = () =&gt; {
+  selectedNode = -1;
+  nodeElements.forEach(node =&gt; {
+    node.classList.remove(&#x27;active&#x27;, &#x27;deactive&#x27;);
+    node.style.opacity = 1;
+  });
+  edgeElements.forEach(edge =&gt; {
+    edge.classList.remove(&#x27;active&#x27;, &#x27;deactive&#x27;);
+  });
+};
+
+const selectNode = (index) =&gt; {
+  selectedNode = index;
+  const activationPattern = activations[index];
+
+  activationPattern.nodes.forEach((activation, i) =&gt; {
+    const node = nodeElements[i];
+    if (activation &gt; 0) {
+      node.classList.add(&#x27;active&#x27;);
+      node.classList.remove(&#x27;deactive&#x27;);
+      node.style.opacity = 0.2 + 0.8 * activation;
+      activationElements[i].textContent = activation.toFixed(2);
+    } else {
+      node.classList.add(&#x27;deactive&#x27;);
+      node.classList.remove(&#x27;active&#x27;);
+      node.style.opacity = 1;
+    }
+  });
+
+  activationPattern.edges.forEach((activation, i) =&gt; {
+    const edge = edgeElements[i];
+    edge.style.opacity = activation;
+  });
+
+};
+
+background.addEventListener(&#x27;click&#x27;, deselectNodes);
+
+inputNodes.forEach((node, index) =&gt; {
+  node.addEventListener(&#x27;click&#x27;, () =&gt; {
+    if (selectedNode === index) {
+      deselectNodes();
+    } else {
+      selectNode(index);
+    }
+  });
+});
+
+</script>
 </svg>
