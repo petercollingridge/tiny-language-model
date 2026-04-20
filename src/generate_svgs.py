@@ -1,5 +1,8 @@
 import html
 import os
+
+from torch import layout
+
 from vis.draw_svg import SVG
 
 MARGIN_X = 85
@@ -46,7 +49,7 @@ def get_network(layout, tokens, weights):
     for layer_n, layer in enumerate(layout):
         for i in range(layer):
             y = MARGIN_Y + NODE_RADIUS + i * (2 * NODE_RADIUS + NODE_DY)
-            node = { 'x': x, 'y': y, 'layer': layer_n }
+            node = { 'x': x, 'y': y, 'layer': layer_n, 'id': len(nodes) }
             if layer_n == 0 or layer_n == len(layout) - 1:
                 node['label'] = tokens[i]
             nodes.append(node)
@@ -56,18 +59,58 @@ def get_network(layout, tokens, weights):
         for i, row in enumerate(layer_weights):
             n = len(row)
             for j, weight in enumerate(row):
-                edge = { 'node1': nodes[i], 'node2': nodes[n + j], 'weight': weight }
+                edge = { 'node1': i, 'node2': n + j, 'weight': weight }
                 edges.append(edge)
 
     return { 'nodes': nodes, 'edges': edges, 'layout': layout }
 
 
-def add_styles(svg):
+def get_activation_pattern(network, n_tokens):
+    """
+    Create a pattern of active nodes and edges based on the weights in the network.
+    """
+    nodes = network['nodes']
+    edges = network['edges']
+    activation_patterns = []
+
+    for token in range(n_tokens):
+        node_activations = [0] * len(nodes)
+        edge_activations = [0] * len(edges)
+        node_activations[token] = 1
+
+        for i, edge in enumerate(edges):
+            if edge['node1'] == token:
+                edge_activations[i] = 1
+                node_activations[edge['node2']] += edge['weight']
+        
+        activation_patterns.append({'nodes': node_activations, 'edges': edge_activations})
+
+    return activation_patterns
+
+
+def _add_styles(svg):
     svg.add_style('.node circle', {'fill': 'none', 'stroke': '#111', 'stroke-width': 1})
+    svg.add_style('.node .active circle', {'fill': 'rgb(0, 63, 92)', 'stroke': 'rgb(0, 63, 92)', 'stroke-width': 1})
     svg.add_style('.node text', {'dominant-baseline': 'middle'})
     svg.add_style('.input-node', {'text-anchor': 'end'})
+    svg.add_style('.input-node.active text', {'fill': 'rgb(255, 0, 175)'})
+    svg.add_style('.input-node.deactive text', {'fill': 'rgb(200, 200, 200)'})
     svg.add_style('.output-node', {'text-anchor': 'start'})
     svg.add_style('.edge line', {'stroke': '#aaa', 'stroke-width': 2, 'opacity': 0.8})
+    svg.add_style('.hit-box', {'opacity': 0.05})
+
+
+def _add_script(svg, edges, filename):
+    filepath = os.path.join('js_scripts', filename)
+    with open(filepath, 'r', encoding='utf-8') as f:
+        script = f.read()
+
+    edge_code = 'const edges = ['
+    for edge in edges:
+        edge_code += f"[{edge['node1']}, {edge['node2']}, {edge['weight']}],"
+    edge_code += '];\n\n'
+
+    svg.add('script', {}, edge_code + html.escape(script))
 
 
 def draw_network_svg(token_list, network):
@@ -79,42 +122,60 @@ def draw_network_svg(token_list, network):
     svg_height = 2 * MARGIN_Y + n_tokens * (2 * NODE_RADIUS + NODE_DY) - NODE_DY
 
     svg = SVG({'viewBox': f"0 0 {svg_width} {svg_height}"})
-    add_styles(svg)
+    _add_styles(svg)
 
-    svg.rect(0, 0, svg_width, svg_height, fill='#f8f8f8')
+    svg.rect(0, 0, svg_width, svg_height, classname='hit-box background')
 
     nodes_group = svg.add('g', {'class': 'node'})
     edges_group = svg.add('g', {'class': 'edge'})
+    nodes = network['nodes']
 
-    for node in network['nodes']:
+    for node in nodes:
         x = node['x']
         y = node['y']
         if 'label' not in node:
             nodes_group.circle(x, y, NODE_RADIUS)
         else:
             classname = 'input-node' if node['layer'] == 0 else 'output-node'
-            label_x = x - 5 - NODE_RADIUS if node['layer'] == 0 else x + 5 + NODE_RADIUS
-            node_group = nodes_group.add('g', {'class': classname})
-            node_group.circle(x, y, NODE_RADIUS)
-            node_group.add('text', {'x': label_x, 'y': y}, html.escape(node['label']))
+            offset = -1 if node['layer'] == 0 else 1
+
+            node_group = nodes_group.add('g', {
+                'class': classname,
+                'id': f"node-{node['id']}",
+                'transform': f'translate({x},{y})'}
+            )
+            node_group.add('circle', {'r': NODE_RADIUS})
+            node_group.add('text', {'x': offset * (5 + NODE_RADIUS)}, html.escape(node['label']))
+
+            if node['layer'] == 0:
+                rect_x = -NODE_RADIUS - MARGIN_X
+                rect_width = MARGIN_X + 2 * NODE_RADIUS + 2
+                node_group.rect(rect_x, -NODE_RADIUS - 1, rect_width, 2 * NODE_RADIUS + 2, classname = 'hit-box')
 
     for edge in network['edges']:
-        x1 = edge['node1']['x']
-        y1 = edge['node1']['y']
-        x2 = edge['node2']['x']
-        y2 = edge['node2']['y']
-        dx = x2 - x1
-        dy = y2 - y1
-        d = (dx ** 2 + dy ** 2) ** 0.5
-        if d > 0:
-            offset_x = dx / d * (NODE_RADIUS + 2)
-            offset_y = dy / d * (NODE_RADIUS + 2)
-            x1 += offset_x
-            y1 += offset_y
-            x2 -= offset_x
-            y2 -= offset_y
-        edges_group.line(x1, y1, x2, y2, style=f"opacity: {edge['weight']:.2f}")
+        if edge['weight'] > 0:
+            node1 = nodes[edge['node1']]
+            node2 = nodes[edge['node2']]
+            x1 = node1['x']
+            y1 = node1['y']
+            x2 = node2['x']
+            y2 = node2['y']
+            dx = x2 - x1
+            dy = y2 - y1
+            d = (dx ** 2 + dy ** 2) ** 0.5
+            if d > 0:
+                offset_x = dx / d * (NODE_RADIUS + 2)
+                offset_y = dy / d * (NODE_RADIUS + 2)
+                x1 += offset_x
+                y1 += offset_y
+                x2 -= offset_x
+                y2 -= offset_y
+            edges_group.line(x1, y1, x2, y2, classname=f"edge-{edge['node1']}")
 
+    activations = get_activation_pattern(network, n_tokens)
+    print(activations)
+
+    _add_script(svg, network['edges'], 'network_activation.js')
     svg.write('network.svg')
 
 
