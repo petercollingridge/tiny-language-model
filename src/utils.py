@@ -2,7 +2,7 @@ import os
 import torch
 
 
-LEARNING_RATE = 5e-4
+LEARNING_RATE = 1e-3
 
 
 def get_text(folder, filename):

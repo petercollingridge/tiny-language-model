@@ -70,7 +70,7 @@ def example2(folder):
     """
 
     model = DeeperBigramModel()
-    run_example(folder, model, steps=20000)
+    run_example(folder, model, steps=10000)
 
 
 def example3(folder):

@@ -69,15 +69,13 @@ class DeeperBigramModel(BigramModel):
 
     def build(self, vocab_size):
         self.model = nn.Sequential(
-            nn.Linear(vocab_size, self.hidden_size),  # token ids -> vectors
-            nn.Linear(self.hidden_size, vocab_size)   # vectors -> logits over vocab
+            nn.Embedding(vocab_size, self.hidden_size),  # token ids -> vectors
+            nn.Linear(self.hidden_size, vocab_size)      # vectors -> logits over vocab
         )
         self.vocab_size = vocab_size
 
     def forward(self, input_values, targets=None):
-        encoded_inputs = F.one_hot(input_values, num_classes=self.vocab_size)
-        encoded_inputs = encoded_inputs.to(dtype=self.model[0].weight.dtype)
-        logits = self.model(encoded_inputs)
+        logits = self.model(input_values)
 
         if targets is None:
             loss = None
