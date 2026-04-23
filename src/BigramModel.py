@@ -69,14 +69,15 @@ class DeeperBigramModel(BigramModel):
 
     def build(self, vocab_size):
         self.model = nn.Sequential(
-            nn.Embedding(vocab_size, self.hidden_size),  # token ids -> vectors
-            nn.ReLU(),
-            nn.Linear(self.hidden_size, vocab_size)      # vectors -> logits over vocab
+            nn.Linear(vocab_size, self.hidden_size),  # token ids -> vectors
+            nn.Linear(self.hidden_size, vocab_size)   # vectors -> logits over vocab
         )
         self.vocab_size = vocab_size
 
     def forward(self, input_values, targets=None):
-        logits = self.model(input_values)
+        encoded_inputs = F.one_hot(input_values, num_classes=self.vocab_size)
+        encoded_inputs = encoded_inputs.to(dtype=self.model[0].weight.dtype)
+        logits = self.model(encoded_inputs)
 
         if targets is None:
             loss = None
@@ -91,6 +92,7 @@ class DeeperBigramModel(BigramModel):
     def output_weights(self):
         """ Return all weights of of the model. """
         return [param.detach().cpu() for param in self.model.parameters()]
+
 
 class BigramModelWithPositionalEncoding(nn.Module):
     """ More advanced bigram model that adds positional encoding and token embeddings """
