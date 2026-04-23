@@ -1,8 +1,16 @@
+from pathlib import Path
 import sys
 
 from BigramModel import BigramModel, DeeperBigramModel
 from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model, write_output, save_model
 from tokeniser import Tokeniser, SimpleWordTokeniser
+
+
+BASE_DIR = Path(__file__).resolve().parent
+
+
+def get_example_folder(folder):
+    return str((BASE_DIR / folder).resolve())
 
 
 def get_tokeniser(folder, tokeniser=Tokeniser):
@@ -37,6 +45,7 @@ def run_example(folder, model, steps=10000):
     Run an example of training a bigram model on two sentences.
     """
 
+    folder = get_example_folder(folder)
     seqs, tokeniser = get_tokeniser(folder, SimpleWordTokeniser)
     model.build(tokeniser.vocab_size)
     get_batch = get_batching_func(tokeniser, seqs)
@@ -61,7 +70,7 @@ def example2(folder):
     """
 
     model = DeeperBigramModel()
-    run_example(folder, model, steps=10000)
+    run_example(folder, model, steps=20000)
 
 
 def example3(folder):
@@ -87,3 +96,5 @@ if __name__ == "__main__":
             examples[example_name](example_name)
         else:
             print(f"Unknown example: {example_name}")
+    else:
+        print("Please provide an example name as a command line argument.")
