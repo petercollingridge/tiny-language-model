@@ -17,16 +17,14 @@
 		.matrix path {
 			fill: none;
 			stroke: #aaa;
-			stroke-width: 2;
+			stroke-width: 1;
 		}
 		.matrix text {
 			font-size: 12px;
 			font-family: monospace;
 			text-anchor: middle;
 			alignment-baseline: middle;
-		}
-		.matrix text.positive {
-			fill: rgb(45, 125, 122);
+			fill: currentColor;
 		}
 		.matrix-row {
 			opacity: 0.25;
@@ -41,7 +39,7 @@
 			stroke-width: 2;
 		}
 	</style>
-	<rect fill="#eee" stroke="#ccc" x="0" y="0" width="755" height="180"/>
+	<rect fill="none" stroke="#ccc" x="0" y="0" width="755" height="180"/>
 
 	<g id="input-tokens" class="tokens" transform="translate(60, 10)">
 		<text x="20" y="20" class="active">&lt;BR&gt;</text>
@@ -60,48 +58,49 @@
 		<text x="15" y="110">0</text>
 		<text x="15" y="140">0</text>
 	</g>
+
 	<g class="matrix" transform="translate(135, 10)">
 		<path d="M 10 0h-10v160h10"/>
 		<path d="M 290 0h10v160h-10"/>
 
 		<g class="matrix-row active-row">
-			<text x="30" y="20">-4.049</text>
-			<text x="90" y="20">-3.734</text>
-			<text x="150" y="20">-3.085</text>
-			<text x="210" y="20" class="positive">4.246</text>
-			<text x="270" y="20">-4.011</text>
+			<text x="30" y="20" color="rgb(228,182,97)">-3.389</text>
+			<text x="90" y="20" color="rgb(215,190,144)">-2.491</text>
+			<text x="150" y="20" color="rgb(236,177,66)">-3.863</text>
+			<text x="210" y="20" color="rgb(160,173,178)">1.949</text>
+			<text x="270" y="20" color="rgb(227,183,100)">-3.341</text>
 		</g>
 
 		<g class="matrix-row">
-			<text x="30" y="50">-4.285</text>
-			<text x="90" y="50">-4.831</text>
-			<text x="150" y="50" class="positive">1.393</text>
-			<text x="210" y="50">-5.322</text>
-			<text x="270" y="50" class="positive">1.455</text>
+			<text x="30" y="50" color="rgb(208,194,167)">-1.892</text>
+			<text x="90" y="50" color="rgb(255,166,0)">-4.728</text>
+			<text x="150" y="50" color="rgb(161,173,179)">1.931</text>
+			<text x="210" y="50" color="rgb(226,183,103)">-3.291</text>
+			<text x="270" y="50" color="rgb(160,173,178)">1.947</text>
 		</g>
 
 		<g class="matrix-row">
-			<text x="30" y="80" class="positive">4.923</text>
-			<text x="90" y="80">-3.45</text>
-			<text x="150" y="80">-2.8</text>
-			<text x="210" y="80">-2.877</text>
-			<text x="270" y="80">-2.83</text>
+			<text x="30" y="80" color="rgb(133,154,163)">2.541</text>
+			<text x="90" y="80" color="rgb(253,166,4)">-4.669</text>
+			<text x="150" y="80" color="rgb(210,193,162)">-2.049</text>
+			<text x="210" y="80" color="rgb(235,178,71)">-3.784</text>
+			<text x="270" y="80" color="rgb(225,184,106)">-3.237</text>
 		</g>
 
 		<g class="matrix-row">
-			<text x="30" y="110">-5.169</text>
-			<text x="90" y="110" class="positive">3.984</text>
-			<text x="150" y="110">-3.277</text>
-			<text x="210" y="110">-3.35</text>
-			<text x="270" y="110">-2.621</text>
+			<text x="30" y="110" color="rgb(212,192,155)">-2.234</text>
+			<text x="90" y="110" color="rgb(0,63,92)">4.391</text>
+			<text x="150" y="110" color="rgb(212,192,154)">-2.255</text>
+			<text x="210" y="110" color="rgb(220,187,125)">-2.878</text>
+			<text x="270" y="110" color="rgb(203,197,187)">-1.176</text>
 		</g>
 
 		<g class="matrix-row">
-			<text x="30" y="140" class="positive">5.153</text>
-			<text x="90" y="140">-2.43</text>
-			<text x="150" y="140">-2.578</text>
-			<text x="210" y="140">-2.419</text>
-			<text x="270" y="140">-2.975</text>
+			<text x="30" y="140" color="rgb(99,131,145)">3.114</text>
+			<text x="90" y="140" color="rgb(221,186,122)">-2.936</text>
+			<text x="150" y="140" color="rgb(207,195,171)">-1.784</text>
+			<text x="210" y="140" color="rgb(209,194,165)">-1.960</text>
+			<text x="270" y="140" color="rgb(219,187,128)">-2.818</text>
 		</g>
 	</g>
 
