@@ -3,7 +3,7 @@ import os
 
 from vis.draw_svg import SVG
 
-MARGIN_X = 85
+MARGIN_X = 100
 MARGIN_Y = 10
 NODE_RADIUS = 20
 NODE_DX = 200
@@ -68,7 +68,7 @@ def get_network(layout, tokens, weights):
     return { 'nodes': nodes, 'edges': edges, 'layout': layout }
 
 
-def get_activation_pattern(network, layout):
+def get_activation_pattern(network, layout, softmax=True):
     """
     Create a pattern of active nodes and edges based on the weights in the network.
     """
@@ -90,13 +90,12 @@ def get_activation_pattern(network, layout):
         # Softmax the activations of the output layer nodes.
         output_layer_start = sum(layout[:-1])
         output_activations = node_activations[output_layer_start:]
-        max_activation = max(output_activations)
-        exp_activations = [pow(2.71828, a - max_activation) for a in output_activations]
-        sum_exp = sum(exp_activations)
-        if sum_exp > 0:
-            output_activations = [a / sum_exp for a in exp_activations]
-        else:
-            output_activations = [0] * len(output_activations)
+        if softmax:
+            max_activation = max(output_activations)
+            exp_activations = [pow(2.71828, a - max_activation) for a in output_activations]
+            sum_exp = sum(exp_activations)
+            if sum_exp > 0:
+                output_activations = [a / sum_exp for a in exp_activations]
 
         for i, output_activation in enumerate(output_activations):
             node_activations[output_layer_start + i] = round(output_activation, 2)
@@ -122,8 +121,22 @@ def _add_styles(svg):
     })
     svg.add_style('.output-node.deactive text', {'opacity': 0})
     svg.add_style('.node .active text.activation-value', {'opacity': 1})
-    svg.add_style('.edge line', {'stroke-width': 2})
-    svg.add_style('.hit-box', {'opacity': 0.05})
+    svg.add_style('.edge line', {'stroke-width': 2, 'stroke': 'currentColor', 'marker-end': 'url(#arrow)'})
+    svg.add_style('.hit-box', {'opacity': 0})
+
+
+def _add_arrow_marker(svg):
+    defs = svg.add('defs')
+    marker = defs.add('marker', {
+        'id': 'arrow',
+        'viewBox': '0 0 28 28',
+        'refX': '5',
+        'refY': '5',
+        'markerWidth': '6',
+        'markerHeight': '6',
+        'orient': 'auto-start-reverse'
+    })
+    marker.add('path', {'d': 'M 0 0 L 10 5 L 0 10 z', 'fill': 'currentColor'})
 
 
 def _add_script(svg, activations, filename):
@@ -131,19 +144,20 @@ def _add_script(svg, activations, filename):
     with open(filepath, 'r', encoding='utf-8') as f:
         script = f.read()
 
-    edge_code = f'const activations = {activations};\n\n'
-    svg.add('script', {}, edge_code + html.escape(script))
+    id_code = f'\nconst svgId = "{svg.attributes["id"]}";\n'
+    edge_code = f'\nconst activations = {activations};\n\n'
+    svg.add('script', {}, id_code + edge_code + html.escape(script))
 
 
 def lerp_colour(weight, max_weight, colour1, colour2):
-    ratio = weight / max_weight if max_weight != 0 else 0
+    ratio = (weight / max_weight) ** 2 if max_weight != 0 else 0
     return [
         int(colour1[i] + ratio * (colour2[i] - colour1[i]))
         for i in range(3)
     ]
 
 
-def draw_network_svg(token_list, layout, network):
+def draw_network_svg(svg_id, token_list, layout, network):
     """ Draw a fully connected network of nodes representing the tokens in token_list. """
 
     n_tokens = len(token_list)
@@ -151,7 +165,7 @@ def draw_network_svg(token_list, layout, network):
     svg_width = 2 * (MARGIN_X + NODE_RADIUS * 2) + NODE_DX
     svg_height = 2 * MARGIN_Y + n_tokens * (2 * NODE_RADIUS + NODE_DY) - NODE_DY
 
-    svg = SVG({'viewBox': f"0 0 {svg_width} {svg_height}"})
+    svg = SVG({'id': svg_id, 'viewBox': f"0 0 {svg_width} {svg_height}"})
     _add_styles(svg)
 
     svg.rect(0, 0, svg_width, svg_height, classname='hit-box background')
@@ -209,25 +223,25 @@ def draw_network_svg(token_list, layout, network):
             colour = lerp_colour(-edge['weight'], -min_weight, GREY, YELLOW)
 
         stroke = f"rgb({colour[0]},{colour[1]},{colour[2]})"
-        edges_group.line(x1, y1, x2, y2, stroke=stroke, classname=f"edge-{edge['node1']}")
+        edges_group.line(x1, y1, x2, y2, color=stroke)
 
-    activations = get_activation_pattern(network, layout)
+    activations = get_activation_pattern(network, layout, False)
     _add_script(svg, activations, 'network_activation.js')
 
-    svg.write('network.svg')
+    svg.write(f'{svg_id}.svg')
 
 
-def draw_network_1(folder):
+def draw_network_1(folder, svg_id):
     filename = os.path.join(folder, "model_output.txt")
     data = parse_data(filename)
     n = len(data['tokens'])
     layout = [n, n]
 
     network = get_network(layout, data['tokens'], data['weights'])
-    draw_network_svg(data['tokens'], layout, network)
+    draw_network_svg(svg_id, data['tokens'], layout, network)
 
     print(network)
 
 
 if __name__ == "__main__":
-    draw_network_1("example1")
+    draw_network_1("example1", 'activation-network')

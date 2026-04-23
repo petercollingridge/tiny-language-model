@@ -1,8 +1,8 @@
-const background = document.querySelector('.background');
-const inputNodes = document.querySelectorAll('.input-node');
-const nodeElements = document.querySelectorAll('.node > *');
-const activationElements = document.querySelectorAll('.activation-value');
-const edgeElements = document.querySelectorAll('.edge line');
+const background = document.querySelector(`#${svgId} .background`);
+const inputNodes = document.querySelectorAll(`#${svgId} .input-node`);
+const nodeElements = document.querySelectorAll(`#${svgId} .node > *`);
+const activationElements = document.querySelectorAll(`#${svgId} .activation-value`);
+const edgeElements = document.querySelectorAll(`#${svgId} .edge line`);
 
 let selectedNode = -1;
 
@@ -13,7 +13,7 @@ const deselectNodes = () => {
     node.style.opacity = 1;
   });
   edgeElements.forEach(edge => {
-    edge.classList.remove('active', 'deactive');
+    edge.style.opacity = 1;
   });
 };
 
@@ -34,6 +34,7 @@ const selectNode = (index) => {
       node.style.opacity = 1;
     }
   });
+
 
   activationPattern.edges.forEach((activation, i) => {
     const edge = edgeElements[i];

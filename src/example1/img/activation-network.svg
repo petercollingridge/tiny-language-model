@@ -1,4 +1,4 @@
-<svg viewBox="0 0 480 280" xmlns="http://www.w3.org/2000/svg">
+<svg id="activation-network" viewBox="0 0 480 280" xmlns="http://www.w3.org/2000/svg">
 
 <style>
   .node circle {
@@ -133,13 +133,16 @@
         <line color="rgb(209,194,165)" x1="141.4" y1="245.1" x2="338.6" y2="199.9"/>
         <line color="rgb(219,187,128)" x1="142" y1="250" x2="338" y2="250"/>
     </g>
-    <script>const activations = [{'nodes': [1, 0, 0, 0, 0, 0.0, 0.01, 0.0, 0.98, 0.0], 'edges': [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 1, 0, 0, 0, 0.01, 0.0, 0.49, 0.0, 0.5], 'edges': [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 1, 0, 0, 0.98, 0.0, 0.01, 0.0, 0.0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 1, 0, 0.0, 0.99, 0.0, 0.0, 0.0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 0, 1, 0.98, 0.0, 0.01, 0.01, 0.0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]}];
+    <script>
+const svgId = "activation-network";
 
-const background = document.querySelector(&#x27;.background&#x27;);
-const inputNodes = document.querySelectorAll(&#x27;.input-node&#x27;);
-const nodeElements = document.querySelectorAll(&#x27;.node &gt; *&#x27;);
-const activationElements = document.querySelectorAll(&#x27;.activation-value&#x27;);
-const edgeElements = document.querySelectorAll(&#x27;.edge line&#x27;);
+const activations = [{'nodes': [1, 0, 0, 0, 0, -3.39, -2.49, -3.86, 1.95, -3.34], 'edges': [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 1, 0, 0, 0, -1.89, -4.73, 1.93, -3.29, 1.95], 'edges': [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 1, 0, 0, 2.54, -4.67, -2.05, -3.78, -3.24], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 1, 0, -2.23, 4.39, -2.25, -2.88, -1.18], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 0, 1, 3.11, -2.94, -1.78, -1.96, -2.82], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1]}];
+
+const background = document.querySelector(`#${svgId} .background`);
+const inputNodes = document.querySelectorAll(`#${svgId} .input-node`);
+const nodeElements = document.querySelectorAll(`#${svgId} .node &gt; *`);
+const activationElements = document.querySelectorAll(`#${svgId} .activation-value`);
+const edgeElements = document.querySelectorAll(`#${svgId} .edge line`);
 
 let selectedNode = -1;
 
@@ -176,7 +179,6 @@ const selectNode = (index) =&gt; {
   activationPattern.edges.forEach((activation, i) =&gt; {
     const edge = edgeElements[i];
     edge.style.opacity = activation;
-    edge.style.stroke = &#x27;red&#x27;;
   });
 
 };
