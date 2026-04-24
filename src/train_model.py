@@ -2,7 +2,7 @@ from pathlib import Path
 import sys
 
 from BigramModel import BigramModel, DeeperBigramModel
-from utils import generate_text, get_text, get_seqs, get_random_seqs, run_model, write_output, save_model
+from utils import generate_text, get_filepath, get_text, get_seqs, get_random_seqs, run_model, write_output, save_model
 from tokeniser import Tokeniser, SimpleWordTokeniser
 
 
@@ -13,8 +13,9 @@ def get_example_folder(folder):
     return str((BASE_DIR / folder).resolve())
 
 
-def get_tokeniser(folder, tokeniser=Tokeniser):
-    text = get_text(folder, "training_sentences.txt")
+def get_tokeniser(folder, suffix = None, tokeniser=Tokeniser):
+    filename = "training_sentences.txt" if suffix is None else f"training_sentences_{suffix}.txt"
+    text = get_text(folder, filename)
     seqs = get_seqs(text)
     tokeniser = tokeniser(seqs)
     print(tokeniser.vocab_size, tokeniser.block_size)
@@ -29,7 +30,7 @@ def get_batching_func(tokeniser, seqs):
     return get_batch
 
 
-def output_generated_text(folder, tokeniser, model, n=20):
+def output_generated_text(filepath, tokeniser, model, n=20):
     """
     Generate n sequences of text using the trained model and save to a file.
     """
@@ -37,49 +38,54 @@ def output_generated_text(folder, tokeniser, model, n=20):
     max_new_tokens = min(20, tokeniser.block_size)
     sequences = generate_text(model, tokeniser, n = n, max_new_tokens = max_new_tokens)
     output = "\n".join(sequences)   
-    write_output(folder, "generated_sentences.txt", output)
+    write_output(filepath, output)
 
 
-def run_example(folder, model, steps=10000):
+def run_example(example_name, model, steps=10000):
     """
     Run an example of training a bigram model on two sentences.
     """
 
-    folder = get_example_folder(folder)
-    seqs, tokeniser = get_tokeniser(folder, SimpleWordTokeniser)
+    folder_name, suffix = example_name.split("_")
+    folder = get_example_folder(folder_name)
+    seqs, tokeniser = get_tokeniser(folder, suffix, SimpleWordTokeniser)
     model.build(tokeniser.vocab_size)
     get_batch = get_batching_func(tokeniser, seqs)
 
     run_model(model, get_batch, steps=steps)
-    save_model(folder, steps, model, tokeniser)
-    output_generated_text(folder, tokeniser, model)
+
+    model_filepath = get_filepath(folder, "model_output", suffix)
+    save_model(model_filepath, steps, model, tokeniser)
+
+    sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
+    output_generated_text(sentences_filepath, tokeniser, model)
 
 
-def example1(folder):
+def example1(example_name):
     """
     Training a bigram model on two sentences.
     """
 
     model = BigramModel()
-    run_example(folder, model)
+    run_example(example_name, model)
 
 
-def example2(folder):
+def example2(example_name):
     """
     Training a bigram model with a hidden layer on two sentences.
     """
 
     model = DeeperBigramModel()
-    run_example(folder, model, steps=10000)
+    run_example(example_name, model, steps=10000)
 
 
-def example3(folder):
+def example3(example_name):
     """
     Same as example 2, but with more words.
     """
 
-    model = DeeperBigramModel(4)
-    run_example(folder, model, steps=50000)
+    model = DeeperBigramModel(2)
+    run_example(example_name, model, steps=10000)
 
 
 examples = {
@@ -92,8 +98,9 @@ if __name__ == "__main__":
     # Get value from command line argument to decide which example to run
     if len(sys.argv) > 1:
         example_name = sys.argv[1]
-        if example_name in examples:
-            examples[example_name](example_name)
+        folder = example_name.split("_")[0]
+        if folder in examples:
+            examples[folder](example_name)
         else:
             print(f"Unknown example: {example_name}")
     else:

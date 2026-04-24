@@ -1,0 +1,31 @@
+<svg viewBox="-115 -115 230 230" width="230" height="230" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  line.axis {
+    stroke: black;
+    stroke-width: 1;
+  }
+  path.cross {
+    stroke: red;
+    stroke-width: 1;
+    fill: none;
+  }
+  text.label {
+    font-size: 12px;
+    text-anchor: middle;
+  }
+  </style>
+
+    <line x1="0" y1="-100" x2="0" y2="100" class="axis"/>
+    <line x1="-100" y1="0" x2="100" y2="0" class="axis"/>
+    <path d="M64.149 -102.1 l7 7 M64.149 -95.1 l7 -7" class="cross"/>
+    <text x="67.649" y="-105.6" class="label">&lt;BR&gt;</text>
+    <path d="M-85.647 -102.158 l7 7 M-85.647 -95.158 l7 -7" class="cross"/>
+    <text x="-82.147" y="-105.658" class="label">are</text>
+    <path d="M62.369 71.5 l7 7 M62.369 78.5 l7 -7" class="cross"/>
+    <text x="65.869" y="68.0" class="label">herbivores</text>
+    <path d="M-82.759 96.5 l7 7 M-82.759 103.5 l7 -7" class="cross"/>
+    <text x="-79.259" y="93.0" class="label">sheep</text>
+    <path d="M62.428 75.788 l7 7 M62.428 82.788 l7 -7" class="cross"/>
+    <text x="65.928" y="92" class="label">slow</text>
+</svg>

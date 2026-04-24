@@ -107,14 +107,19 @@ def generate_text(model, tokeniser, n = 5, max_new_tokens=20):
     return sequences
 
 
-def write_output(folder, filename, output):
+def get_filepath(folder, filename, suffix=None):
+    filename = filename if suffix is None else f"{filename}_{suffix}"
+    return os.path.join(folder, filename + ".txt")
+
+
+def write_output(filepath, output):
     """ Write output string to a file in the given folder """
 
-    with open(os.path.join(folder, filename), 'w', encoding='utf-8') as f:
+    with open(filepath, 'w', encoding='utf-8') as f:
         f.write(output)
 
 
-def save_model(folder, steps, model, tokeniser):
+def save_model(filepath, steps, model, tokeniser):
     """ Save the model's output embeddings and the tokeniser's vocabulary to a file. """
 
     output = f"steps: {steps}\n"
@@ -131,4 +136,4 @@ def save_model(folder, steps, model, tokeniser):
                 output += ",".join(f"{value.item():.3f}" for value in row)
             output += "\n"
 
-    write_output(folder, "model_output.txt", output)
+    write_output(filepath, output)

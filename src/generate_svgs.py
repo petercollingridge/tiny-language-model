@@ -243,5 +243,37 @@ def draw_network_1(folder, svg_id):
     print(network)
 
 
+def draw_token_embeddings(folder, svg_id, suffix=None):
+    AXIS = 100
+    SIZE = AXIS + 15
+
+    filename = os.path.join(folder, "model_output.txt" if suffix is None else f"model_output_{suffix}.txt")
+    data = parse_data(filename)
+    weights = data['weights'][0]
+    
+    max_weight = max(abs(weight) for row in weights for weight in row)
+    scale = AXIS / max_weight if max_weight != 0 else 1
+
+    svg = SVG({'viewBox': f"{-SIZE} {-SIZE} {SIZE * 2} {SIZE * 2}", 'width': SIZE * 2, 'height': SIZE * 2})
+
+    svg.add_style('line.axis', {'stroke': 'black', 'stroke-width': 1})
+    svg.add_style('path.cross', {'stroke': 'red', 'stroke-width': 1, 'fill': 'none'})
+    svg.add_style('text.label', {'font-size': '12px', 'text-anchor': 'middle'})
+
+    svg.line(0, -AXIS, 0, AXIS, attrs={'class': 'axis'})
+    svg.line(-AXIS, 0, AXIS, 0, attrs={'class': 'axis'})
+
+    for i, row in enumerate(weights):
+        x = round(row[0] * scale, 2)
+        y = round(row[1] * scale, 2)
+        svg.add('path', {'d': f'M{x - 3.5} {y - 3.5} l7 7 M{x - 3.5} {y + 3.5} l7 -7', 'class': 'cross'})
+        svg.add('text', {'x': x, 'y': y - 7, 'class': 'label'}, html.escape(data['tokens'][i]))
+
+    svg_filename = f'{svg_id}.svg' if suffix is None else f'{svg_id}_{suffix}.svg'
+    svg.write(os.path.join(folder, svg_filename))
+
+
 if __name__ == "__main__":
-    draw_network_1("example1", 'activation-network')
+    # draw_network_1("example1", 'activation-network')
+    # draw_token_embeddings("example2", 'token-embeddings')
+    draw_token_embeddings("example3", 'token-embeddings', "3d")

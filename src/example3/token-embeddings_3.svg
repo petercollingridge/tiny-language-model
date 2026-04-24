@@ -1,0 +1,41 @@
+<svg viewBox="-115 -115 230 230" width="230" height="230" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  line.axis {
+    stroke: black;
+    stroke-width: 1;
+  }
+  path.cross {
+    stroke: red;
+    stroke-width: 1;
+    fill: none;
+  }
+  text.label {
+    font-size: 12px;
+    text-anchor: middle;
+  }
+  </style>
+
+    <line x1="0" y1="-100" x2="0" y2="100" class="axis"/>
+    <line x1="-100" y1="0" x2="100" y2="0" class="axis"/>
+    <path d="M84.07 -100.34 l7 7 M84.07 -93.34 l7 -7" class="cross"/>
+    <text x="87.57" y="-103.84" class="label">&lt;BR&gt;</text>
+    <path d="M-43.3 63.42 l7 7 M-43.3 70.42 l7 -7" class="cross"/>
+    <text x="-39.8" y="59.92" class="label">are</text>
+    <path d="M-12.94 -81.71 l7 7 M-12.94 -74.71 l7 -7" class="cross"/>
+    <text x="-9.44" y="-85.21" class="label">eat</text>
+    <path d="M39.79 3.2 l7 7 M39.79 10.2 l7 -7" class="cross"/>
+    <text x="43.29" y="-0.2999999999999998" class="label">fast</text>
+    <path d="M51.64 2.05 l7 7 M51.64 9.05 l7 -7" class="cross"/>
+    <text x="55.14" y="-1.4500000000000002" class="label">grass</text>
+    <path d="M52.8 1.6500000000000004 l7 7 M52.8 8.65 l7 -7" class="cross"/>
+    <text x="56.3" y="-1.8499999999999996" class="label">herbivores</text>
+    <path d="M-79.89 -43.28 l7 7 M-79.89 -36.28 l7 -7" class="cross"/>
+    <text x="-76.39" y="-46.78" class="label">rabbits</text>
+    <path d="M6.76 96.5 l7 7 M6.76 103.5 l7 -7" class="cross"/>
+    <text x="10.26" y="93.0" class="label">run</text>
+    <path d="M-83.93 0.2400000000000002 l7 7 M-83.93 7.24 l7 -7" class="cross"/>
+    <text x="-80.43" y="-3.26" class="label">sheep</text>
+    <path d="M32.33 3.99 l7 7 M32.33 10.99 l7 -7" class="cross"/>
+    <text x="35.83" y="0.4900000000000002" class="label">slow</text>
+</svg>

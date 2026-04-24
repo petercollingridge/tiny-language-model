@@ -1,0 +1,6 @@
+sheep are slow
+sheep are herbivores
+sheep eat grass
+rabbits run fast
+rabbits are herbivores
+rabbits eat grass
