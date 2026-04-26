@@ -1,0 +1,35 @@
+<svg viewBox="-115 -115 230 230" width="230" height="230" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  line.axis {
+    stroke: black;
+    stroke-width: 1;
+  }
+  path.cross {
+    stroke: red;
+    stroke-width: 1;
+    fill: none;
+  }
+  text.label {
+    font-size: 12px;
+    text-anchor: middle;
+  }
+  </style>
+
+    <line x1="0" y1="-100" x2="0" y2="100" class="axis"/>
+    <line x1="-100" y1="0" x2="100" y2="0" class="axis"/>
+    <path d="M67.67 -43.16 l7 7 M67.67 -36.16 l7 -7" class="cross"/>
+    <text x="71.17" y="-46.66" class="label">&lt;BR&gt;</text>
+    <path d="M-13.89 -68.66 l7 7 M-13.89 -61.66 l7 -7" class="cross"/>
+    <text x="-10.39" y="-72.16" class="label">are</text>
+    <path d="M68.38 61.620000000000005 l7 7 M68.38 68.62 l7 -7" class="cross"/>
+    <text x="71.88" y="58.120000000000005" class="label">eat</text>
+    <path d="M-32.55 62.269999999999996 l7 7 M-32.55 69.27 l7 -7" class="cross"/>
+    <text x="-29.05" y="58.769999999999996" class="label">grass</text>
+    <path d="M-30.49 55.53 l7 7 M-30.49 62.53 l7 -7" class="cross"/>
+    <text x="-26.99" y="52.03" class="label">herbivores</text>
+    <path d="M-103.5 -7.35 l7 7 M-103.5 -0.3500000000000001 l7 -7" class="cross"/>
+    <text x="-100.0" y="-10.85" class="label">sheep</text>
+    <path d="M-34.14 59.28 l7 7 M-34.14 66.28 l7 -7" class="cross"/>
+    <text x="-30.64" y="55.78" class="label">slow</text>
+</svg>

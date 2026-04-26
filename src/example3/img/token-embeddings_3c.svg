@@ -10,7 +10,7 @@
     stroke-width: 1;
     fill: none;
   }
-  text.label {
+  text.plot-label {
     font-size: 12px;
     text-anchor: middle;
   }
@@ -19,23 +19,23 @@
     <line x1="0" y1="-100" x2="0" y2="100" class="axis"/>
     <line x1="-100" y1="0" x2="100" y2="0" class="axis"/>
     <path d="M-73.63 77.39 l7 7 M-73.63 84.39 l7 -7" class="cross"/>
-    <text x="-70.13" y="73.89" class="label">&lt;BR&gt;</text>
+    <text x="-70.13" y="73.89" class="plot-label">&lt;BR&gt;</text>
     <path d="M-103.5 -47.93 l7 7 M-103.5 -40.93 l7 -7" class="cross"/>
-    <text x="-100.0" y="-51.43" class="label">are</text>
+    <text x="-100.0" y="-51.43" class="plot-label">are</text>
     <path d="M55.08 34.04 l7 7 M55.08 41.04 l7 -7" class="cross"/>
-    <text x="58.58" y="30.54" class="label">eat</text>
+    <text x="58.58" y="30.54" class="plot-label">eat</text>
     <path d="M39.25 -50.95 l7 7 M39.25 -43.95 l7 -7" class="cross"/>
-    <text x="42.75" y="-54.45" class="label">fast</text>
+    <text x="42.75" y="-54.45" class="plot-label">fast</text>
     <path d="M41.75 -56.5 l7 7 M41.75 -49.5 l7 -7" class="cross"/>
-    <text x="45.25" y="-60.0" class="label">grass</text>
+    <text x="45.25" y="-60.0" class="plot-label">grass</text>
     <path d="M34.35 -67.95 l7 7 M34.35 -60.95 l7 -7" class="cross"/>
-    <text x="37.85" y="-71.45" class="label">herbivores</text>
+    <text x="37.85" y="-71.45" class="plot-label">herbivores</text>
     <path d="M-8.92 -28.97 l7 7 M-8.92 -21.97 l7 -7" class="cross"/>
-    <text x="-5.42" y="-32.47" class="label">rabbits</text>
+    <text x="-5.42" y="-32.47" class="plot-label">rabbits</text>
     <path d="M3.08 89.99 l7 7 M3.08 96.99 l7 -7" class="cross"/>
-    <text x="6.58" y="86.49" class="label">run</text>
+    <text x="6.58" y="86.49" class="plot-label">run</text>
     <path d="M-5.99 -0.6400000000000001 l7 7 M-5.99 6.359999999999999 l7 -7" class="cross"/>
-    <text x="-2.49" y="-4.140000000000001" class="label">sheep</text>
+    <text x="-2.49" y="-4.140000000000001" class="plot-label">sheep</text>
     <path d="M35.97 -52.74 l7 7 M35.97 -45.74 l7 -7" class="cross"/>
-    <text x="39.47" y="-56.24" class="label">slow</text>
+    <text x="39.47" y="-56.24" class="plot-label">slow</text>
 </svg>

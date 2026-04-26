@@ -1,0 +1,4 @@
+sheep are slow
+sheep are herbivores
+sheep eat grass
+wolves eat sheep

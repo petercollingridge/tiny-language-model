@@ -129,7 +129,7 @@ def _add_arrow_marker(svg):
     defs = svg.add('defs')
     marker = defs.add('marker', {
         'id': 'arrow',
-        'viewBox': '0 0 28 28',
+        'viewBox': '0 0 15 15',
         'refX': '5',
         'refY': '5',
         'markerWidth': '6',
@@ -155,6 +155,23 @@ def lerp_colour(weight, max_weight, colour1, colour2):
         int(colour1[i] + ratio * (colour2[i] - colour1[i]))
         for i in range(3)
     ]
+
+
+def offset_line(x1, y1, x2, y2, offset, offset2 = None):
+    if offset2 is None:
+        offset2 = offset
+    dx = x2 - x1
+    dy = y2 - y1
+    d = (dx ** 2 + dy ** 2) ** 0.5
+    if d > 0:
+        offset_x = dx / d * offset
+        offset_y = dy / d * offset
+        offset_x2 = dx / d * offset2
+        offset_y2 = dy / d * offset2
+        return x1 + offset_x, y1 + offset_y, x2 - offset_x2, y2 - offset_y2
+    else:
+        return x1, y1, x2, y2
+
 
 
 def draw_network_svg(svg_id, token_list, layout, network):
@@ -231,6 +248,47 @@ def draw_network_svg(svg_id, token_list, layout, network):
     svg.write(f'{svg_id}.svg')
 
 
+def draw_chain(svg_id, layers, transitions):
+    MARGIN = 10 + NODE_RADIUS
+    NODE_DX = 200
+    NODE_DY = 40 + NODE_RADIUS * 2
+
+    nodes_x = len(layers)
+    nodes_y = max(len(layer) for layer in layers)
+    width = 2 * MARGIN + (nodes_x - 1) * NODE_DX
+    height = 2 * MARGIN + (nodes_y - 1) * NODE_DY
+    mid_y = height / 2
+    
+    svg = SVG({'id': svg_id, 'viewBox': f'0 0 {width} {height}'})
+    _add_styles(svg)
+    _add_arrow_marker(svg)
+
+    node_g = svg.add('g', {'class': 'node'})
+    node_positions = {}
+
+    for i, layer in enumerate(layers):
+        x = MARGIN + i * NODE_DX
+        nodes_in_layer = len(layer)
+        layer_height = (nodes_in_layer - 1) * NODE_DY
+        layer_start_y = mid_y - layer_height / 2
+        for j, node in enumerate(layer):
+            y = layer_start_y + j * NODE_DY
+            node_positions[node] = (x, y )
+            node_g.circle(x, y, 20)
+            node_g.add('text', {'x': x, 'y': y + NODE_RADIUS + 10, 'text-anchor': 'middle','class': 'plot-label'}, html.escape(node))
+
+    edge_g = svg.add('g', {'class': 'edge-arrow'})
+
+    for transition in transitions:
+        from_node, to_node = transition
+        x1, y1 = node_positions[from_node]
+        x2, y2 = node_positions[to_node]
+        x1, y1, x2, y2 = offset_line(x1, y1, x2, y2, NODE_RADIUS + 2, NODE_RADIUS + 6)
+        edge_g.line(x1, y1, x2, y2)
+
+    svg.write(f'{svg_id}.svg')
+
+
 def draw_network_1(folder, svg_id):
     filename = os.path.join(folder, "model_output.txt")
     data = parse_data(filename)
@@ -273,7 +331,47 @@ def draw_token_embeddings(folder, svg_id, suffix=None):
     svg.write(os.path.join(folder, svg_filename))
 
 
+def draw_chain_1():
+    nodes = [['<BR>'], ['sheep'], ['are', 'eat'], ['herbivores', 'slow', 'grass'], ['<END>']]
+    transitions = [
+        ['<BR>', 'sheep'],
+        ['sheep', 'are'],
+        ['sheep', 'eat'],
+        ['are', 'herbivores'],
+        ['are', 'slow'],
+        ['eat', 'grass'],
+        ['herbivores', '<END>'],
+        ['slow', '<END>'],
+        ['grass', '<END>']
+    ]
+    draw_chain('simple_chain', nodes, transitions)
+
+
+def draw_chain_2():
+    nodes = [['<BR>'], ['sheep', 'rabbits'], ['are', 'eat', 'like'], ['herbivores', 'slow', 'grass', 'running'], ['<END>']]
+    transitions = [
+        ['<BR>', 'sheep'],
+        ['<BR>', 'rabbits'],
+        ['sheep', 'are'],
+        ['sheep', 'eat'],
+        ['rabbits', 'are'],
+        ['rabbits', 'eat'],
+        ['rabbits', 'like'],
+        ['are', 'herbivores'],
+        ['are', 'slow'],
+        ['eat', 'grass'],
+        ['like', 'running'],
+        ['herbivores', '<END>'],
+        ['slow', '<END>'],
+        ['grass', '<END>'],
+        ['running', '<END>']
+    ]
+    print(nodes)
+    draw_chain('simple_chain', nodes, transitions)
+
 if __name__ == "__main__":
     # draw_network_1("example1", 'activation-network')
     # draw_token_embeddings("example2", 'token-embeddings')
-    draw_token_embeddings("example3", 'token-embeddings', "3d")
+    draw_token_embeddings("example3", 'token-embeddings', "4")
+    # draw_chain_1()
+    # draw_chain_2()

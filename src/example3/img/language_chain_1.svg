@@ -1,0 +1,85 @@
+<svg id="simple_chain" viewBox="0 0 860 220" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  .node circle {
+    fill: none;
+    stroke: #111;
+    stroke-width: 1;
+  }
+  .node .active circle {
+    fill: rgb(0, 63, 92);
+    stroke: rgb(0, 63, 92);
+    stroke-width: 1;
+  }
+  .node text {
+    dominant-baseline: middle;
+  }
+  .node .active text {
+    fill: rgb(255, 0, 175);
+  }
+  .node .deactive text {
+    fill: rgb(200, 200, 200);
+  }
+  .input-node {
+    text-anchor: end;
+  }
+  .output-node {
+    text-anchor: start;
+  }
+  .node text.activation-value {
+    text-anchor: middle;
+    font-size: 10px;
+    fill: #fff;
+    opacity: 0;
+  }
+  .output-node.deactive text {
+    opacity: 0;
+  }
+  .node .active text.activation-value {
+    opacity: 1;
+  }
+  .edge line {
+    stroke-width: 2;
+    stroke: currentColor;
+    marker-end: url(#arrow);
+  }
+  .hit-box {
+    opacity: 0;
+  }
+  </style>
+
+    <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="currentColor"/>
+        </marker>
+    </defs>
+    <g class="node">
+        <circle cx="30" cy="110" r="20"/>
+        <text x="30" y="140.0" text-anchor="middle" class="label">&lt;BR&gt;</text>
+        <circle cx="230" cy="110" r="20"/>
+        <text x="230" y="140.0" text-anchor="middle" class="label">sheep</text>
+        <circle cx="430" cy="70" r="20"/>
+        <text x="430" y="100.0" text-anchor="middle" class="label">are</text>
+        <circle cx="430" cy="150" r="20"/>
+        <text x="430" y="180.0" text-anchor="middle" class="label">eat</text>
+        <circle cx="630" cy="30" r="20"/>
+        <text x="630" y="60.0" text-anchor="middle" class="label">herbivores</text>
+        <circle cx="630" cy="110" r="20"/>
+        <text x="630" y="140.0" text-anchor="middle" class="label">slow</text>
+        <circle cx="630" cy="190" r="20"/>
+        <text x="630" y="220.0" text-anchor="middle" class="label">grass</text>
+        <circle cx="830" cy="110" r="20"/>
+        <text x="830" y="140.0" text-anchor="middle" class="label">&lt;END&gt;</text>
+    </g>
+    <g class="edge">
+        <line x1="52" y1="110" x2="202" y2="110"/>
+        <line x1="251.6" y1="105.7" x2="402.5" y2="75.5"/>
+        <line x1="251.6" y1="114.3" x2="402.5" y2="144.5"/>
+        <line x1="451.6" y1="65.7" x2="602.5" y2="35.5"/>
+        <line x1="451.6" y1="74.3" x2="602.5" y2="104.5"/>
+        <line x1="451.6" y1="154.3" x2="602.5" y2="184.5"/>
+        <line x1="650.4" y1="38.2" x2="804" y2="99.6"/>
+        <line x1="652" y1="110" x2="802" y2="110"/>
+        <line x1="650.4" y1="181.8" x2="804" y2="120.4"/>
+    </g>
+</svg>
