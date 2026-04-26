@@ -1,0 +1,196 @@
+<svg id="activation-network" viewBox="0 0 680 280" xmlns="http://www.w3.org/2000/svg">
+
+<style>
+  .node circle {
+    fill: none;
+    stroke: #111;
+    stroke-width: 1;
+  }
+  .node .active circle {
+    fill: rgb(0, 63, 92);
+    stroke: rgb(0, 63, 92);
+    stroke-width: 1;
+  }
+  .node text {
+    dominant-baseline: middle;
+  }
+  .node .active text {
+    fill: rgb(255, 0, 175);
+  }
+  .node .deactive text {
+    fill: rgb(200, 200, 200);
+  }
+  .input-node {
+    text-anchor: end;
+  }
+  .output-node {
+    text-anchor: start;
+  }
+  .node text.activation-value {
+    text-anchor: middle;
+    font-size: 10px;
+    fill: #fff;
+    opacity: 0;
+  }
+  .output-node.deactive text {
+    opacity: 0;
+  }
+  .node .active text.activation-value {
+    opacity: 1;
+  }
+  .edge line {
+    stroke-width: 2;
+    stroke: currentColor;
+    marker-end: url(#arrow);
+  }
+  .hit-box {
+    opacity: 0.1;
+  }
+  </style>
+
+    <rect class="hit-box background" x="0" y="0" width="680" height="280"/>
+    <g class="node">
+        <g class="input-node" transform="translate(120,30.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">&lt;BR&gt;</text>
+            <rect class="hit-box" x="-120" y="-21" width="142" height="42"/>
+        </g>
+        <g class="input-node" transform="translate(120,85.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">are</text>
+            <rect class="hit-box" x="-120" y="-21" width="142" height="42"/>
+        </g>
+        <g class="input-node" transform="translate(120,140.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">herbivores</text>
+            <rect class="hit-box" x="-120" y="-21" width="142" height="42"/>
+        </g>
+        <g class="input-node" transform="translate(120,195.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">sheep</text>
+            <rect class="hit-box" x="-120" y="-21" width="142" height="42"/>
+        </g>
+        <g class="input-node" transform="translate(120,250.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="-25">slow</text>
+            <rect class="hit-box" x="-120" y="-21" width="142" height="42"/>
+        </g>
+        <circle cx="340" cy="112.5" r="20"/>
+        <circle cx="340" cy="167.5" r="20"/>
+        <g class="output-node" transform="translate(560,30.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">&lt;BR&gt;</text>
+        </g>
+        <g class="output-node" transform="translate(560,85.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">are</text>
+        </g>
+        <g class="output-node" transform="translate(560,140.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">herbivores</text>
+        </g>
+        <g class="output-node" transform="translate(560,195.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">sheep</text>
+        </g>
+        <g class="output-node" transform="translate(560,250.0)">
+            <circle r="20"/>
+            <text class="activation-value">0</text>
+            <text x="25">slow</text>
+        </g>
+    </g>
+    <g class="edge">
+        <line color="rgb(64,105,125)" x1="140.6" y1="37.7" x2="319.4" y2="104.8"/>
+        <line color="rgb(254,180,0)" x1="138.7" y1="41.7" x2="321.3" y2="155.8"/>
+        <line color="rgb(245,183,33)" x1="141.8" y1="87.7" x2="318.2" y2="109.8"/>
+        <line color="rgb(255,180,0)" x1="140.6" y1="92.7" x2="319.4" y2="159.8"/>
+        <line color="rgb(68,107,127)" x1="141.8" y1="137.3" x2="318.2" y2="115.2"/>
+        <line color="rgb(49,94,117)" x1="141.8" y1="142.7" x2="318.2" y2="164.8"/>
+        <line color="rgb(244,183,39)" x1="140.6" y1="187.3" x2="319.4" y2="120.2"/>
+        <line color="rgb(0,60,90)" x1="141.8" y1="192.3" x2="318.2" y2="170.2"/>
+        <line color="rgb(68,107,127)" x1="138.7" y1="238.3" x2="321.3" y2="124.2"/>
+        <line color="rgb(41,88,112)" x1="140.6" y1="242.3" x2="319.4" y2="175.2"/>
+        <line color="rgb(73,111,130)" x1="360.6" y1="104.8" x2="539.4" y2="37.7"/>
+        <line color="rgb(131,151,162)" x1="358.7" y1="155.8" x2="541.3" y2="41.7"/>
+        <line color="rgb(227,189,99)" x1="361.8" y1="109.8" x2="538.2" y2="87.7"/>
+        <line color="rgb(96,127,142)" x1="360.6" y1="159.8" x2="539.4" y2="92.7"/>
+        <line color="rgb(209,196,166)" x1="361.8" y1="115.2" x2="538.2" y2="137.3"/>
+        <line color="rgb(216,194,141)" x1="361.8" y1="164.8" x2="538.2" y2="142.7"/>
+        <line color="rgb(23,76,103)" x1="360.6" y1="120.2" x2="539.4" y2="187.3"/>
+        <line color="rgb(233,187,78)" x1="361.8" y1="170.2" x2="538.2" y2="192.3"/>
+        <line color="rgb(209,196,165)" x1="358.7" y1="124.2" x2="541.3" y2="238.3"/>
+        <line color="rgb(216,194,140)" x1="360.6" y1="175.2" x2="539.4" y2="242.3"/>
+    </g>
+    <script>
+const svgId = "activation-network";
+
+const activations = [{'nodes': [1, 0, 0, 0, 0, 2.319, -3.38, 0, 0, 0, 0, 0], 'edges': [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 1, 0, 0, 0, -2.816, -3.382, 0, 0, 0, 0, 0], 'edges': [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 1, 0, 0, 2.258, 2.571, 0, 0, 0, 0, 0], 'edges': [0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 1, 0, -2.717, 3.428, 0, 0, 0, 0, 0], 'edges': [0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}, {'nodes': [0, 0, 0, 0, 1, 2.26, 2.718, 0, 0, 0, 0, 0], 'edges': [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}];
+
+const background = document.querySelector(`#${svgId} .background`);
+const inputNodes = document.querySelectorAll(`#${svgId} .input-node`);
+const nodeElements = document.querySelectorAll(`#${svgId} .node &gt; *`);
+const activationElements = document.querySelectorAll(`#${svgId} .activation-value`);
+const edgeElements = document.querySelectorAll(`#${svgId} .edge line`);
+
+let selectedNode = -1;
+
+const deselectNodes = () =&gt; {
+  selectedNode = -1;
+  nodeElements.forEach(node =&gt; {
+    node.classList.remove(&#x27;active&#x27;, &#x27;deactive&#x27;);
+    node.style.opacity = 1;
+  });
+  edgeElements.forEach(edge =&gt; {
+    edge.style.opacity = 1;
+  });
+};
+
+const selectNode = (index) =&gt; {
+  selectedNode = index;
+  const activationPattern = activations[index];
+
+  activationPattern.nodes.forEach((activation, i) =&gt; {
+    const node = nodeElements[i];
+    if (activation &gt; 0) {
+      node.classList.add(&#x27;active&#x27;);
+      node.classList.remove(&#x27;deactive&#x27;);
+      node.style.opacity = 0.2 + 0.8 * activation;
+      activationElements[i].textContent = activation.toFixed(2);
+    } else {
+      node.classList.add(&#x27;deactive&#x27;);
+      node.classList.remove(&#x27;active&#x27;);
+      node.style.opacity = 1;
+    }
+  });
+
+
+  activationPattern.edges.forEach((activation, i) =&gt; {
+    const edge = edgeElements[i];
+    edge.style.opacity = activation;
+  });
+
+};
+
+background.addEventListener(&#x27;click&#x27;, deselectNodes);
+
+inputNodes.forEach((node, index) =&gt; {
+  node.addEventListener(&#x27;click&#x27;, () =&gt; {
+    if (selectedNode === index) {
+      deselectNodes();
+    } else {
+      selectNode(index);
+    }
+  });
+});
+
+</script>
+</svg>

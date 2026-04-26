@@ -2,7 +2,9 @@ This folder contains the python code to run the various models.
 
 Run `pip install -r requirements.txt`
 
-Then run `python train_model example1` or `python train_model example2`
+Then run `python train_model example1` to train a model using the sentence in `example1 / training_sentences.txt`.
+
+To train on e.g. `example3 / training_sentences1b.txt`, run `python train_model example3_1b`.
 
 The results from each model will be saved in the corresponding folder.
 

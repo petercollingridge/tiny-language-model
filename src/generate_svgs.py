@@ -6,12 +6,12 @@ from vis.draw_svg import SVG
 MARGIN_X = 100
 MARGIN_Y = 10
 NODE_RADIUS = 20
-NODE_DX = 200
-NODE_DY = 15
+NODE_DX = 220
+NODE_DY = 55
 
-BLUE = [0, 63, 92]
+BLUE = [0, 60, 90]
 GREY = [200, 200, 200]
-YELLOW = [255, 166, 0]
+YELLOW = [255, 180, 0]
 
 
 def parse_data(filename):
@@ -40,6 +40,12 @@ def parse_data(filename):
     return { 'tokens': tokens, 'weights': weights }
 
 
+def get_filepath(folder, filename, suffix=None):
+    if suffix is not None:
+        filename = f"{filename}_{suffix}"
+    return os.path.join(folder, filename + ".txt")
+
+
 def get_network(layout, tokens, weights):
     """
     Create a network layout of nodes and edges.
@@ -48,21 +54,34 @@ def get_network(layout, tokens, weights):
     nodes = []
     edges = []
     x = MARGIN_X + NODE_RADIUS
+    max_layer_size = max(layout)
 
     for layer_n, layer in enumerate(layout):
+        start_y = MARGIN_Y + NODE_RADIUS + (max_layer_size - layer) * NODE_DY / 2
         for i in range(layer):
-            y = MARGIN_Y + NODE_RADIUS + i * (2 * NODE_RADIUS + NODE_DY)
+            y = start_y + i * NODE_DY
             node = { 'x': x, 'y': y, 'layer': layer_n, 'id': len(nodes) }
             if layer_n == 0 or layer_n == len(layout) - 1:
                 node['label'] = tokens[i]
             nodes.append(node)
-        x += NODE_DX + 2 * NODE_RADIUS
+        x += NODE_DX
 
-    for layer_weights in weights:
-        for i, row in enumerate(layer_weights):
-            n = len(row)
+    # input layer to first hidden layer
+    nodes_in_input_layer = layout[0]
+    for i, row in enumerate(weights[0]):
+        start_node = i
+        for j, weight in enumerate(row):
+            edge = { 'node1': start_node, 'node2': nodes_in_input_layer + j, 'weight': weight }
+            edges.append(edge)
+
+    start_of_output_layer = sum(layout[:-1])
+    if len(layout) > 2:
+        # hidden layer to output layer
+        for i, row in enumerate(weights[1]):
+            end_node = start_of_output_layer + i
             for j, weight in enumerate(row):
-                edge = { 'node1': i, 'node2': n + j, 'weight': weight }
+                start_node = nodes_in_input_layer + j
+                edge = { 'node1': start_node, 'node2': end_node, 'weight': weight }
                 edges.append(edge)
 
     return { 'nodes': nodes, 'edges': edges, 'layout': layout }
@@ -122,7 +141,7 @@ def _add_styles(svg):
     svg.add_style('.output-node.deactive text', {'opacity': 0})
     svg.add_style('.node .active text.activation-value', {'opacity': 1})
     svg.add_style('.edge line', {'stroke-width': 2, 'stroke': 'currentColor', 'marker-end': 'url(#arrow)'})
-    svg.add_style('.hit-box', {'opacity': 0})
+    svg.add_style('.hit-box', {'opacity': 0.1})
 
 
 def _add_arrow_marker(svg):
@@ -140,7 +159,7 @@ def _add_arrow_marker(svg):
 
 
 def _add_script(svg, activations, filename):
-    filepath = os.path.join('js_scripts', filename)
+    filepath = os.path.join('vis', 'js_scripts', filename)
     with open(filepath, 'r', encoding='utf-8') as f:
         script = f.read()
 
@@ -150,7 +169,7 @@ def _add_script(svg, activations, filename):
 
 
 def lerp_colour(weight, max_weight, colour1, colour2):
-    ratio = (weight / max_weight) ** 2 if max_weight != 0 else 0
+    ratio = (weight / max_weight) ** 1 if max_weight != 0 else 0
     return [
         int(colour1[i] + ratio * (colour2[i] - colour1[i]))
         for i in range(3)
@@ -173,14 +192,14 @@ def offset_line(x1, y1, x2, y2, offset, offset2 = None):
         return x1, y1, x2, y2
 
 
-
 def draw_network_svg(svg_id, token_list, layout, network):
     """ Draw a fully connected network of nodes representing the tokens in token_list. """
 
     n_tokens = len(token_list)
+    n_layers = len(layout)
 
-    svg_width = 2 * (MARGIN_X + NODE_RADIUS * 2) + NODE_DX
-    svg_height = 2 * MARGIN_Y + n_tokens * (2 * NODE_RADIUS + NODE_DY) - NODE_DY
+    svg_width = 2 * (MARGIN_X + NODE_RADIUS) + (n_layers - 1) * NODE_DX
+    svg_height = 2 * (MARGIN_Y + NODE_RADIUS) + (n_tokens - 1) * NODE_DY
 
     svg = SVG({'id': svg_id, 'viewBox': f"0 0 {svg_width} {svg_height}"})
     _add_styles(svg)
@@ -237,6 +256,7 @@ def draw_network_svg(svg_id, token_list, layout, network):
         if edge['weight'] > 0:
             colour = lerp_colour(edge['weight'], max_weight, GREY, BLUE)
         else:
+            # colour = lerp_colour(-edge['weight'], -min_weight, GREY, RED)
             colour = lerp_colour(-edge['weight'], -min_weight, GREY, YELLOW)
 
         stroke = f"rgb({colour[0]},{colour[1]},{colour[2]})"
@@ -245,7 +265,7 @@ def draw_network_svg(svg_id, token_list, layout, network):
     activations = get_activation_pattern(network, layout, False)
     _add_script(svg, activations, 'network_activation.js')
 
-    svg.write(f'{svg_id}.svg')
+    return svg
 
 
 def draw_chain(svg_id, layers, transitions):
@@ -258,7 +278,7 @@ def draw_chain(svg_id, layers, transitions):
     width = 2 * MARGIN + (nodes_x - 1) * NODE_DX
     height = 2 * MARGIN + (nodes_y - 1) * NODE_DY
     mid_y = height / 2
-    
+
     svg = SVG({'id': svg_id, 'viewBox': f'0 0 {width} {height}'})
     _add_styles(svg)
     _add_arrow_marker(svg)
@@ -290,6 +310,9 @@ def draw_chain(svg_id, layers, transitions):
 
 
 def draw_network_1(folder, svg_id):
+    """
+    Draw a fully connected network of nodes with two layers representing the tokens in token_list.
+    """
     filename = os.path.join(folder, "model_output.txt")
     data = parse_data(filename)
     n = len(data['tokens'])
@@ -301,12 +324,34 @@ def draw_network_1(folder, svg_id):
     print(network)
 
 
+def draw_network_2(folder, svg_id, suffix=None):
+    """
+    Draw a fully connected network of nodes with an input layer, hidden layer, and output layer.
+    """
+
+    filepath = get_filepath(folder, "model_output", suffix)
+    data = parse_data(filepath)
+    weights = data['weights']
+
+    n = len(weights[0])
+    hidden = len(weights[0][0])
+    layout = [n, hidden, n]
+
+    network = get_network(layout, data['tokens'], data['weights'])
+
+    svg_filename = f'{svg_id}.svg' if suffix is None else f'{svg_id}_{suffix}.svg'
+    svg = draw_network_svg(svg_id, data['tokens'], layout, network)
+    svg.write(os.path.join(folder, svg_filename))
+
+    # print(network)
+
+
 def draw_token_embeddings(folder, svg_id, suffix=None):
     AXIS = 100
     SIZE = AXIS + 15
 
-    filename = os.path.join(folder, "model_output.txt" if suffix is None else f"model_output_{suffix}.txt")
-    data = parse_data(filename)
+    filepath = get_filepath(folder, "model_output", suffix)
+    data = parse_data(filepath)
     weights = data['weights'][0]
     
     max_weight = max(abs(weight) for row in weights for weight in row)
@@ -371,7 +416,8 @@ def draw_chain_2():
 
 if __name__ == "__main__":
     # draw_network_1("example1", 'activation-network')
+    draw_network_2("example2", 'activation-network')
     # draw_token_embeddings("example2", 'token-embeddings')
-    draw_token_embeddings("example3", 'token-embeddings', "4")
+    # draw_token_embeddings("example3", 'token-embeddings', "4")
     # draw_chain_1()
     # draw_chain_2()
