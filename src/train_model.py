@@ -46,8 +46,9 @@ def run_example(example_name, model, steps=10000):
     Run an example of training a bigram model on two sentences.
     """
 
-    folder_name, suffix = example_name.split("_")
-    folder = get_example_folder(folder_name)
+    folder_name = example_name.split("_")
+    suffix = folder_name[1] if len(folder_name) > 1 else None
+    folder = get_example_folder(folder_name[0])
     seqs, tokeniser = get_tokeniser(folder, suffix, SimpleWordTokeniser)
     model.build(tokeniser.vocab_size)
     get_batch = get_batching_func(tokeniser, seqs)
@@ -92,6 +93,7 @@ examples = {
     'example1': example1,
     'example2': example2,
     'example3': example3,
+    'example4': example3,
 }
 
 if __name__ == "__main__":

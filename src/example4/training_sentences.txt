@@ -1,0 +1,7 @@
+sheep are slow
+sheep eat grass
+rabbits are fast
+rabbits eat grass
+wolves eat sheep
+wolves are fast
+wolves are sheep
