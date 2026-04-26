@@ -6,6 +6,7 @@ LEARNING_RATE = 1e-3
 
 
 def get_text(folder, filename):
+    print(folder, filename)
     with open(os.path.join(folder, filename), 'r', encoding='utf-8') as f:
         text = f.read()
     return text
@@ -67,13 +68,48 @@ def get_random_seqs(seqs, batch_size):
         return x, y
     return get_batch
 
+def get_random_subseqs(seqs, batch_size=8, context_size=None):
+    """
+    Given a list of vectors, return a function that returns a random subsequence of a random
+    vectors as a tensor, shifted by one for the targets.
+    T: time steps, i.e. length of each sequence - 1
+    """
+
+    seqs = torch.tensor(seqs, dtype=torch.long) # (B, T)
+
+    def get_batch():
+        seq_indices = torch.randint(0, len(seqs), (batch_size,))
+        start_positions = torch.randint(0, seqs.size(1) - context_size, (batch_size,))
+        x = torch.stack([seqs[i, j:j+context_size] for i, j in zip(seq_indices, start_positions)])
+        y = torch.stack([seqs[i, j+1:j+context_size+1] for i, j in zip(seq_indices, start_positions)])
+        return x, y
+    return get_batch
+
+
+def get_random_subseq(seqs, context_size):
+    """
+    Given a list of vectors, return a function that returns a random subsequence of a random
+    vector as a tensor, shifted by one for the targets.
+    T: time steps, i.e. length of each sequence - 1
+    """
+
+    seqs = torch.tensor(seqs, dtype=torch.long) # (num_sequences, sequence_length)
+
+    def get_example():
+        seq_index = torch.randint(0, len(seqs), (1,)).item()
+        start_position = torch.randint(0, seqs.size(1) - context_size, (1,)).item()
+        x = seqs[seq_index, start_position:start_position+context_size]
+        y = seqs[seq_index, start_position+1:start_position+context_size+1]
+        return x, y
+    return get_example
+
 
 def run_model(model, get_batch, steps=10000):
     # create a PyTorch optimizer
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
 
     inputs, targets = get_batch()
-    print_steps = int(steps / 10)
+    print_steps = int(steps / 10) or 1
 
     for step in range(steps):
         # Get a batch of data

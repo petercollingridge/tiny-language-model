@@ -40,8 +40,8 @@ class Tokeniser:
 
     def encode(self, text):
         encoded_text = [self.stoi[char] for char in self.split_text(text)]
-        if len(encoded_text) < self.block_size + 2:
-            encoded_text += [self.stoi[PAD]] * (self.block_size - len(encoded_text) - 1)
+        if len(encoded_text) < self.block_size:
+            encoded_text += [self.stoi[PAD]] * (self.block_size - len(encoded_text))
         return [self.stoi[BOS]] + encoded_text + [self.stoi[EOS]]
 
     def decode(self, lst):
@@ -84,4 +84,30 @@ class SimpleWordTokeniser(WordTokeniser):
         end = lst.index(self.stoi[BR]) if self.stoi[BR] in lst else len(lst)
         lst = lst[: end]  # remove second BR and everything after it
         chars = [self.itos[i] for i in lst]
+        return self.join_text(chars)
+
+
+class WordTokeniserWithPadding(WordTokeniser):
+    """
+    Class that converts words to integers and back.
+    Uses a single token to represent sentence breaks and includes padding.
+    """
+
+    def get_vocab(self, text):
+        vocab = set()
+        for token in text:
+            vocab.update(token)
+        return [BR, PAD] + sorted(list(vocab))
+
+    def encode(self, text):
+        encoded_text = [self.stoi[char] for char in self.split_text(text)]
+        if len(encoded_text) + 2 < self.block_size:
+            encoded_text += [self.stoi[PAD]] * (self.block_size - len(encoded_text))
+        return [self.stoi[BR]] + encoded_text + [self.stoi[BR]]
+
+    def decode(self, lst):
+        lst = lst[1:]  # remove initial BR
+        end = lst.index(self.stoi[BR]) if self.stoi[BR] in lst else len(lst)
+        lst = lst[: end]  # remove second BR and everything after it
+        chars = [self.itos[i] for i in lst if i != self.stoi[PAD]]
         return self.join_text(chars)

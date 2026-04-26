@@ -2,23 +2,25 @@ from pathlib import Path
 import sys
 
 from BigramModel import BigramModel, DeeperBigramModel
-from utils import generate_text, get_filepath, get_text, get_seqs, get_random_seqs, run_model, write_output, save_model
-from tokeniser import Tokeniser, SimpleWordTokeniser
+from AttentionModel import AttentionModel
+from utils import generate_text, get_filepath, get_text, get_seqs, get_random_seqs, get_random_subseqs, run_model, write_output, save_model
+from tokeniser import Tokeniser, SimpleWordTokeniser, WordTokeniserWithPadding
 
 
 BASE_DIR = Path(__file__).resolve().parent
 
 
-def get_example_folder(folder):
-    return str((BASE_DIR / folder).resolve())
+def get_example_folder(example_name):
+    folder_name = example_name.split("_")
+    suffix = folder_name[1] if len(folder_name) > 1 else None
+    return str((BASE_DIR / folder_name[0]).resolve()), suffix
 
 
 def get_tokeniser(folder, suffix = None, tokeniser=Tokeniser):
-    filename = "training_sentences.txt" if suffix is None else f"training_sentences_{suffix}.txt"
-    text = get_text(folder, filename)
+    filename = "training_sentences" if suffix is None else f"training_sentences_{suffix}"
+    text = get_text(folder, filename + '.txt')
     seqs = get_seqs(text)
     tokeniser = tokeniser(seqs)
-    print(tokeniser.vocab_size, tokeniser.block_size)
 
     return seqs, tokeniser
 
@@ -46,10 +48,9 @@ def run_example(example_name, model, steps=10000):
     Run an example of training a bigram model on two sentences.
     """
 
-    folder_name = example_name.split("_")
-    suffix = folder_name[1] if len(folder_name) > 1 else None
-    folder = get_example_folder(folder_name[0])
+    folder, suffix = get_example_folder(example_name)
     seqs, tokeniser = get_tokeniser(folder, suffix, SimpleWordTokeniser)
+
     model.build(tokeniser.vocab_size)
     get_batch = get_batching_func(tokeniser, seqs)
 
@@ -60,6 +61,37 @@ def run_example(example_name, model, steps=10000):
 
     sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
     output_generated_text(sentences_filepath, tokeniser, model)
+
+
+def run_example_with_double_tokens(example_name, model, steps=10000):
+    """
+    Run an example of training a bigram model on two sentences.
+    """
+
+    folder, suffix = get_example_folder(example_name)
+    seqs, tokeniser = get_tokeniser(folder, suffix, SimpleWordTokeniser)
+    print(seqs)
+
+
+def attention_example(example_name, embed_dim=2, context_size=None, steps=10000):
+    folder, suffix = get_example_folder(example_name)
+    seqs, tokeniser = get_tokeniser(folder, suffix, SimpleWordTokeniser)
+
+    if context_size is None:
+        context_size = tokeniser.block_size
+
+    encoded_seqs = [tokeniser.encode(seq) for seq in seqs]
+    get_example = get_random_subseqs(encoded_seqs, batch_size=8, context_size=context_size)
+    # print(get_example())
+
+    model = AttentionModel(tokeniser.vocab_size, context_size, embed_dim, head_dim=4)
+    run_model(model, get_example, steps=steps)
+
+    # model_filepath = get_filepath(folder, "model_output", suffix)
+    # save_model(model_filepath, steps, model, tokeniser)
+
+    # sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
+    # output_generated_text(sentences_filepath, tokeniser, model, n=20)
 
 
 def example1(example_name):
@@ -89,11 +121,30 @@ def example3(example_name):
     run_example(example_name, model, steps=10000)
 
 
+def example4(example_name):
+    """
+    Introducing attention
+    """
+
+    # model = DeeperBigramModel(2)
+    # run_example_with_double_tokens(example_name, model, steps=10000)
+    attention_example(example_name, embed_dim=4, context_size=2, steps=16000)
+
+
+def example5(example_name):
+    """
+    Introducing attention
+    """
+
+    attention_example(example_name, embed_dim=4, steps=10000)
+
+
 examples = {
     'example1': example1,
     'example2': example2,
     'example3': example3,
-    'example4': example3,
+    'example4': example4,
+    'example5': example5,
 }
 
 if __name__ == "__main__":

@@ -1,0 +1,20 @@
+sheep are slow
+wolves eat sheep
+sheep eat grass
+sheep are slow
+sheep eat grass
+wolves eat sheep
+wolves are fast
+wolves eat sheep
+sheep eat grass
+sheep are slow
+wolves eat sheep
+sheep eat grass
+wolves are fast
+wolves are fast
+sheep eat grass
+sheep eat grass
+sheep are fast
+sheep are slow
+wolves are fast
+sheep are

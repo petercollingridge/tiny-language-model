@@ -59,7 +59,7 @@ class BigramModel(nn.Module):
 class DeeperBigramModel(BigramModel):
     """
     Simple bigram model that predicts the next token based on the current token only.
-    Has a single hidden later between the input and output nodes.
+    Has a single hidden layer between the input and output nodes.
     """
 
     def __init__(self, hidden_size=2):
