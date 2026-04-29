@@ -2,6 +2,7 @@ import html
 import os
 
 from vis.draw_svg import SVG
+from utils import parse_model_data
 
 MARGIN_X = 100
 MARGIN_Y = 10
@@ -12,32 +13,6 @@ NODE_DY = 55
 BLUE = [0, 60, 90]
 GREY = [200, 200, 200]
 YELLOW = [255, 180, 0]
-
-
-def parse_data(filename):
-    with open(filename, 'r', encoding='utf-8') as f:
-        text = f.read()
-
-    lines = text.splitlines()
-    tokens_line = lines[1]
-    tokens = tokens_line.split(':')[1].strip().split('|')
-
-    weights = []
-    matrix = None
-    for line in lines[2:]:
-        if line.strip():
-            if line.startswith("weights:"):
-                if matrix is not None:
-                    weights.append(matrix)
-                matrix = []
-            else:
-                weight = [float(x) for x in line.strip().split(",")]
-                matrix.append(weight)
-
-    if matrix is not None:
-        weights.append(matrix)
-
-    return { 'tokens': tokens, 'weights': weights }
 
 
 def get_filepath(folder, filename, suffix=None):
@@ -314,7 +289,7 @@ def draw_network_1(folder, svg_id):
     Draw a fully connected network of nodes with two layers representing the tokens in token_list.
     """
     filename = os.path.join(folder, "model_output.txt")
-    data = parse_data(filename)
+    data = parse_model_data(filename)
     n = len(data['tokens'])
     layout = [n, n]
 
@@ -330,7 +305,7 @@ def draw_network_2(folder, svg_id, suffix=None):
     """
 
     filepath = get_filepath(folder, "model_output", suffix)
-    data = parse_data(filepath)
+    data = parse_model_data(filepath)
     weights = data['weights']
 
     n = len(weights[0])
@@ -351,7 +326,7 @@ def draw_token_embeddings(folder, svg_id, suffix=None):
     SIZE = AXIS + 15
 
     filepath = get_filepath(folder, "model_output", suffix)
-    data = parse_data(filepath)
+    data = parse_model_data(filepath)
     weights = data['weights'][0]
     
     max_weight = max(abs(weight) for row in weights for weight in row)
@@ -416,8 +391,9 @@ def draw_chain_2():
 
 if __name__ == "__main__":
     # draw_network_1("example1", 'activation-network')
-    draw_network_2("example2", 'activation-network')
+    # draw_network_2("example2", 'activation-network')
     # draw_token_embeddings("example2", 'token-embeddings')
     # draw_token_embeddings("example3", 'token-embeddings', "4")
+    draw_token_embeddings("example4", 'token-embeddings', "1_good")
     # draw_chain_1()
     # draw_chain_2()

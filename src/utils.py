@@ -68,6 +68,7 @@ def get_random_seqs(seqs, batch_size):
         return x, y
     return get_batch
 
+
 def get_random_subseqs(seqs, batch_size=8, context_size=None):
     """
     Given a list of vectors, return a function that returns a random subsequence of a random
@@ -104,6 +105,34 @@ def get_random_subseq(seqs, context_size):
     return get_example
 
 
+def parse_model_data(filepath):
+    """
+    Given a filepath to a text file of model data, parse the tokens and weights and return as a dictionary.
+    """
+
+    with open(filepath, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    tokens = []
+    weights = []
+    flag = None
+
+    for line in text.splitlines():
+        if line.startswith("tokens:"):
+            flag = "tokens"
+            tokens = line.split(':')[1].strip().split('|')
+        elif line.startswith("weights:"):
+            flag = "weights"
+            weights.append([])
+        elif line.strip() and flag == "weights":
+            weight = [float(x) for x in line.strip().split(",")]
+            weights[-1].append(weight)
+        else:
+            print(line)
+
+    return { 'tokens': tokens, 'weights': weights }
+
+
 def run_model(model, get_batch, steps=10000):
     # create a PyTorch optimizer
     optimizer = torch.optim.AdamW(model.parameters(), lr=LEARNING_RATE)
@@ -132,7 +161,9 @@ def generate_text(model, tokeniser, n = 5, max_new_tokens=20):
 
     sequences = []
     for _ in range(n):
-        # Start with the first token, which should be <BOS>
+        # Start with the first token, which should be <BR>
+        # Dimensions are (B, T) where B=1 and T=1, i.e. a batch of one sequence with one token
+        # We use a batch of one sequence to be consistent with the model's expected input shape.
         first_token = torch.zeros((1, 1), dtype=torch.long)
         tokens = model.generate(first_token, max_new_tokens=max_new_tokens)
 

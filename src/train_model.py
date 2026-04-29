@@ -2,9 +2,9 @@ from pathlib import Path
 import sys
 
 from BigramModel import BigramModel, DeeperBigramModel
-from AttentionModel import AttentionModel
+from AttentionModel import AttentionModel, SimpleAttentionModel
 from utils import generate_text, get_filepath, get_text, get_seqs, get_random_seqs, get_random_subseqs, run_model, write_output, save_model
-from tokeniser import Tokeniser, SimpleWordTokeniser, WordTokeniserWithPadding
+from tokeniser import Tokeniser, SimpleWordTokeniser
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -32,13 +32,17 @@ def get_batching_func(tokeniser, seqs):
     return get_batch
 
 
-def output_generated_text(filepath, tokeniser, model, n=20):
+def output_generated_text(filepath, tokeniser, model, n=20, seqs=None):
     """
     Generate n sequences of text using the trained model and save to a file.
     """
 
     max_new_tokens = min(20, tokeniser.block_size)
     sequences = generate_text(model, tokeniser, n = n, max_new_tokens = max_new_tokens)
+
+    if seqs is not None:
+        sequences = [f"{'  ' if seq in seqs else 'x '} {seq}" for seq in sequences]
+
     output = "\n".join(sequences)   
     write_output(filepath, output)
 
@@ -82,16 +86,41 @@ def attention_example(example_name, embed_dim=2, context_size=None, steps=10000)
 
     encoded_seqs = [tokeniser.encode(seq) for seq in seqs]
     get_example = get_random_subseqs(encoded_seqs, batch_size=8, context_size=context_size)
-    # print(get_example())
+    print(get_example())
 
-    model = AttentionModel(tokeniser.vocab_size, context_size, embed_dim, head_dim=4)
+    head_dim = embed_dim
+    model = SimpleAttentionModel(tokeniser.vocab_size, context_size, embed_dim, head_dim=head_dim)
     run_model(model, get_example, steps=steps)
 
-    # model_filepath = get_filepath(folder, "model_output", suffix)
-    # save_model(model_filepath, steps, model, tokeniser)
+    model_filepath = get_filepath(folder, "model_output", suffix)
+    save_model(model_filepath, steps, model, tokeniser)
 
-    # sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
-    # output_generated_text(sentences_filepath, tokeniser, model, n=20)
+    sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
+    output_generated_text(sentences_filepath, tokeniser, model, n=30, seqs=seqs)
+
+
+def test_model(example_name, embed_dim=2, context_size=None):
+    """ Create a model and test it without training"""
+    folder, suffix = get_example_folder(example_name)
+    seqs, tokeniser = get_tokeniser(folder, suffix, SimpleWordTokeniser)
+
+    if context_size is None:
+        context_size = tokeniser.block_size
+
+    print(embed_dim, context_size)
+
+    encoded_seqs = [tokeniser.encode(seq) for seq in seqs]
+    get_example = get_random_subseqs(encoded_seqs, batch_size=8, context_size=context_size)
+
+    head_dim = embed_dim
+    model = SimpleAttentionModel(tokeniser.vocab_size, context_size, embed_dim, head_dim=head_dim)
+
+    print("Model token embedding weights:")
+    print(model.token_embedding_table.weight)
+    print("Model position embedding weights:")
+    print(model.position_embedding_table.weight)
+
+    generate_text(model, tokeniser, 1, max_new_tokens = 4)
 
 
 def example1(example_name):
@@ -128,7 +157,8 @@ def example4(example_name):
 
     # model = DeeperBigramModel(2)
     # run_example_with_double_tokens(example_name, model, steps=10000)
-    attention_example(example_name, embed_dim=4, context_size=2, steps=16000)
+    # attention_example(example_name, embed_dim=2, context_size=3, steps=10000)
+    test_model(example_name, embed_dim=2, context_size=3)
 
 
 def example5(example_name):
