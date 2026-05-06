@@ -3,8 +3,8 @@ import sys
 
 from BigramModel import BigramModel, DeeperBigramModel
 from AttentionModel import AttentionModel, SimpleAttentionModel
-from utils import generate_text, get_filepath, get_text, get_seqs, get_random_seqs, get_random_subseqs, run_model, write_output, save_model
-from tokeniser import Tokeniser, SimpleWordTokeniser
+from utils import generate_text, get_filepath, get_tokeniser, get_random_seqs, get_random_subseqs, run_model, write_output, save_model, save_checkpoint
+from tokeniser import SimpleWordTokeniser
 
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -16,13 +16,9 @@ def get_example_folder(example_name):
     return str((BASE_DIR / folder_name[0]).resolve()), suffix
 
 
-def get_tokeniser(folder, suffix = None, tokeniser=Tokeniser):
-    filename = "training_sentences" if suffix is None else f"training_sentences_{suffix}"
-    text = get_text(folder, filename + '.txt')
-    seqs = get_seqs(text)
-    tokeniser = tokeniser(seqs)
-
-    return seqs, tokeniser
+def get_checkpoint_filepath(folder, suffix=None):
+    filename = "model_checkpoint" if suffix is None else f"model_checkpoint_{suffix}"
+    return str((Path(folder) / f"{filename}.pt").resolve())
 
 
 def get_batching_func(tokeniser, seqs):
@@ -62,6 +58,23 @@ def run_example(example_name, model, steps=10000):
 
     model_filepath = get_filepath(folder, "model_output", suffix)
     save_model(model_filepath, steps, model, tokeniser)
+    checkpoint_filepath = get_checkpoint_filepath(folder, suffix)
+
+    model_type = type(model).__name__
+    init_kwargs = {}
+    build_kwargs = {"vocab_size": tokeniser.vocab_size}
+    if model_type == "DeeperBigramModel":
+        init_kwargs["hidden_size"] = model.hidden_size
+
+    save_checkpoint(
+        checkpoint_filepath,
+        model,
+        tokeniser,
+        model_type=model_type,
+        init_kwargs=init_kwargs,
+        build_kwargs=build_kwargs,
+        steps=steps,
+    )
 
     sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
     output_generated_text(sentences_filepath, tokeniser, model)
@@ -86,7 +99,7 @@ def attention_example(example_name, embed_dim=2, context_size=None, steps=10000)
 
     encoded_seqs = [tokeniser.encode(seq) for seq in seqs]
     get_example = get_random_subseqs(encoded_seqs, batch_size=8, context_size=context_size)
-    print(get_example())
+    # print(get_example())
 
     head_dim = embed_dim
     model = SimpleAttentionModel(tokeniser.vocab_size, context_size, embed_dim, head_dim=head_dim)
@@ -94,6 +107,20 @@ def attention_example(example_name, embed_dim=2, context_size=None, steps=10000)
 
     model_filepath = get_filepath(folder, "model_output", suffix)
     save_model(model_filepath, steps, model, tokeniser)
+    checkpoint_filepath = get_checkpoint_filepath(folder, suffix)
+    save_checkpoint(
+        checkpoint_filepath,
+        model,
+        tokeniser,
+        model_type="SimpleAttentionModel",
+        init_kwargs={
+            "vocab_size": tokeniser.vocab_size,
+            "context_len": context_size,
+            "embed_dim": embed_dim,
+            "head_dim": head_dim,
+        },
+        steps=steps,
+    )
 
     sentences_filepath = get_filepath(folder, "generated_sentences", suffix)
     output_generated_text(sentences_filepath, tokeniser, model, n=30, seqs=seqs)
@@ -157,8 +184,8 @@ def example4(example_name):
 
     # model = DeeperBigramModel(2)
     # run_example_with_double_tokens(example_name, model, steps=10000)
-    # attention_example(example_name, embed_dim=2, context_size=3, steps=10000)
-    test_model(example_name, embed_dim=2, context_size=3)
+    attention_example(example_name, embed_dim=2, context_size=2, steps=10000)
+    # test_model(example_name, embed_dim=2, context_size=3)
 
 
 def example5(example_name):

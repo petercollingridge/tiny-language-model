@@ -36,14 +36,21 @@ class SingleHeadSelfAttention(nn.Module):
         q = self.query(x)  # (B, context_len, head_dim)
         v = self.value(x)  # (B, context_len, head_dim)
 
+        # print("k", k.tolist())
+        # print("q", q.tolist())
+        # print("v", v.tolist())
+
         # Compute attention scores
         # (B, context_len, head_dim) * (B, head_dim, context_len) -> (B, context_len, context_len)
         attn_logits = torch.matmul(q, k.transpose(-2, -1)) * self.scale
+
+        # print("attn_logits", attn_logits.tolist())
 
         # Apply causal mask: set -inf to future positions
         mask = self.mask[:, :T, :T]  # (1, T, T)
         attn_logits = attn_logits.masked_fill(mask == 0, float("-inf"))
         attn = F.softmax(attn_logits, dim=-1)  # (B, T, T)
+        # print("attn", attn.tolist())
 
         out = torch.matmul(attn, v)  # (B, T, head_dim)
         return out
@@ -54,8 +61,9 @@ class SimpleAttentionModel(nn.Module):
     def __init__(self, vocab_size, context_len, embed_dim, head_dim):
         super().__init__()
         self.token_embedding_table = nn.Embedding(vocab_size, embed_dim)
-        self.position_embedding_table = nn.Embedding(context_len, embed_dim)
-        # For now don't use head_dim, just set it equal to embed_dim and skip the projection back to embed_dim after attention
+        # self.position_embedding_table = nn.Embedding(context_len, embed_dim)
+        # For now don't use head_dim, just set it equal to embed_dim and skip the projection
+        # back to embed_dim after attention
         self.self_attention_head = SingleHeadSelfAttention(embed_dim, embed_dim, context_len)
         self.lm_head = nn.Linear(embed_dim, vocab_size)
 
@@ -65,26 +73,30 @@ class SimpleAttentionModel(nn.Module):
         B, T = idx.shape
 
         # Token embeddings
-        # x = self.token_embedding_table(idx)  # (B, T, embed_dim)
+        x = self.token_embedding_table(idx)  # (B, T, embed_dim)
 
         # Token and position embeddings
-        token_emb = self.token_embedding_table(idx)  # (B, T, embed_dim)
-        pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device))  # (T, embed_dim)
-        x = token_emb + pos_emb  # (B, T, embed_dim)
+        # token_emb = self.token_embedding_table(idx)  # (B, T, embed_dim)
+        # pos_emb = self.position_embedding_table(torch.arange(T, device=idx.device))  # (T, embed_dim)
+        # x = token_emb + pos_emb  # (B, T, embed_dim)
 
-        print("idx", idx)
-        # print("token_emb", token_emb)
+        # print()
         # print("T", T)
+        # print("idx", idx.tolist())
+        # print("token_emb", token_emb.tolist())
         # print("arange", torch.arange(T, device=idx.device))
-        # print("pos_emb", pos_emb)
-        print("x", x)
+        # print("pos_emb", pos_emb.tolist())
+        # print("x", x.tolist())
 
         # Apply self-attention, project back to embed_dim, then add residually.
         attn_out = self.self_attention_head(x)  # (B, T, head_dim)
+        # print("attn_out", attn_out.tolist())
         x = x + attn_out
+        # print("x after attn_out", x.tolist())
 
         # Project back to vocab size
         logits = self.lm_head(x)  # (B, T, vocab_size)
+        # print("logits", logits.tolist())
 
         if targets is None:
             loss = None
@@ -122,7 +134,6 @@ class SimpleAttentionModel(nn.Module):
         # Tokens is a (1, T) array of token indices, so get first item to reduce to list
         return tokens
 
-    
     def output_weights(self):
         """ Return all weights of of the model. """
         return [param.detach().cpu() for param in self.parameters()]

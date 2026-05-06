@@ -1,5 +1,6 @@
 import os
-from utils import parse_model_data
+from utils import parse_model_data, load_checkpoint, generate_text, get_tokeniser
+from tokeniser import SimpleWordTokeniser
 
 
 def add_lists(list1, list2):
@@ -33,8 +34,16 @@ def run_model(folder, filename="model_output.txt"):
 
     print("token_embedding + pos_embedding", add_lists(token_embedding, pos_embedding))
 
-    
+
+def test_model(folder, filename="model_output"):
+    data = load_checkpoint(os.path.join(os.path.dirname(__file__), folder, filename + ".pt"))
+    model = data["model"]
+    tokens = data["tokens"]
+
+    print(tokens)
+    seqs, tokeniser = get_tokeniser(folder, 1, SimpleWordTokeniser)
+    text = generate_text(model, tokeniser, 1, max_new_tokens = 2)
 
 
 if __name__ == "__main__":
-    run_model("example4", "model_output_1_good.txt")
+    test_model("example4", "model_checkpoint_1_good2")

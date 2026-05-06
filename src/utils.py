@@ -1,6 +1,8 @@
 import os
 import torch
 
+from tokeniser import Tokeniser
+
 
 LEARNING_RATE = 1e-3
 
@@ -105,6 +107,14 @@ def get_random_subseq(seqs, context_size):
     return get_example
 
 
+def get_tokeniser(folder, suffix = None, tokeniser=Tokeniser):
+    filename = "training_sentences" if suffix is None else f"training_sentences_{suffix}"
+    text = get_text(folder, filename + '.txt')
+    seqs = get_seqs(text)
+    tokeniser = tokeniser(seqs)
+
+    return seqs, tokeniser
+
 def parse_model_data(filepath):
     """
     Given a filepath to a text file of model data, parse the tokens and weights and return as a dictionary.
@@ -131,6 +141,71 @@ def parse_model_data(filepath):
             print(line)
 
     return { 'tokens': tokens, 'weights': weights }
+
+
+def _get_model_class(model_type):
+    try:
+        from BigramModel import BigramModel, DeeperBigramModel, BigramModelWithPositionalEncoding
+        from AttentionModel import SimpleAttentionModel, AttentionModel
+    except ModuleNotFoundError:
+        from src.BigramModel import BigramModel, DeeperBigramModel, BigramModelWithPositionalEncoding
+        from src.AttentionModel import SimpleAttentionModel, AttentionModel
+
+    model_classes = {
+        "BigramModel": BigramModel,
+        "DeeperBigramModel": DeeperBigramModel,
+        "BigramModelWithPositionalEncoding": BigramModelWithPositionalEncoding,
+        "SimpleAttentionModel": SimpleAttentionModel,
+        "AttentionModel": AttentionModel,
+    }
+
+    if model_type not in model_classes:
+        raise ValueError(f"Unknown model type: {model_type}")
+
+    return model_classes[model_type]
+
+
+def save_checkpoint(filepath, model, tokeniser, model_type, init_kwargs=None, build_kwargs=None, steps=None):
+    """
+    Save a PyTorch checkpoint with enough metadata to reconstruct the model exactly.
+    """
+
+    checkpoint = {
+        "steps": steps,
+        "model_type": model_type,
+        "init_kwargs": init_kwargs or {},
+        "build_kwargs": build_kwargs or {},
+        "token_vocab": tokeniser.vocab,
+        "state_dict": model.state_dict(),
+    }
+    torch.save(checkpoint, filepath)
+
+
+def load_checkpoint(filepath, map_location="cpu"):
+    """
+    Load a model checkpoint created by save_checkpoint and reconstruct the model.
+    """
+
+    checkpoint = torch.load(filepath, map_location=map_location)
+
+    model_class = _get_model_class(checkpoint["model_type"])
+    model = model_class(**checkpoint.get("init_kwargs", {}))
+
+    build_kwargs = checkpoint.get("build_kwargs", {})
+    if build_kwargs:
+        model.build(**build_kwargs)
+
+    model.load_state_dict(checkpoint["state_dict"])
+    model.eval()
+
+    return {
+        "model": model,
+        "tokens": checkpoint.get("token_vocab", []),
+        "steps": checkpoint.get("steps"),
+        "model_type": checkpoint["model_type"],
+        "init_kwargs": checkpoint.get("init_kwargs", {}),
+        "build_kwargs": build_kwargs,
+    }
 
 
 def run_model(model, get_batch, steps=10000):
