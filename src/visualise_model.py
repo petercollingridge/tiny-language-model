@@ -14,6 +14,13 @@ BLUE = [0, 60, 90]
 GREY = [200, 200, 200]
 YELLOW = [255, 180, 0]
 
+RGB_COLORS = [
+    [255, 0, 0],   # BR = white (not actually drawn)
+    [0, 60, 128],      # are = blue
+    [0, 255, 255],     # herbivores = cyan
+    [255, 0, 175],     # sheep = pink
+    [255, 255, 0]      # slow = yellow
+]
 
 def get_filepath(folder, filename, suffix=None):
     if suffix is not None:
@@ -284,6 +291,188 @@ def draw_chain(svg_id, layers, transitions):
     svg.write(f'{svg_id}.svg')
 
 
+def output_map(folder, svg_id):
+    """ Draw a 2D axis as a heatmap of what the output token will be. """
+
+    filename = os.path.join(folder, "model_output.txt")
+    data = parse_model_data(filename)
+    tokens = data['tokens']
+    weights = data['weights'][-2]
+    biases = [d[0] for d in data['weights'][-1]]
+    print(tokens)
+    print(weights)
+    print(biases)
+
+    RANGE = 4   # Values in the input space will be between -RANGE and RANGE
+    SIZE = 100  # Size of the SVG canvas in each direction
+    STEP = 2
+    # COLOURS = [
+    #     'rgb(255, 255, 255)',   # BR = white (not actually drawn)
+    #     'rgb(0, 60, 128)',      # are = blue
+    #     'rgb(0, 255, 255)',     # herbivores = green
+    #     'rgb(255, 0, 175)',     # sheep = pink
+    #     'rgb(255, 255, 0)'      # slow = yellow
+    # ]
+
+    svg = SVG({'id': svg_id, 'viewBox': f'{-SIZE} {-SIZE} {SIZE * 2} {SIZE * 2}'})
+    n = len(tokens)
+
+    for x in range(-SIZE, SIZE + 1, STEP):
+        for y in range(-SIZE, SIZE + 1, STEP):
+            input_vector = [x * RANGE / SIZE, y * RANGE / SIZE]
+            output_vector = [sum(input_vector[i] * weights[j][i] + biases[j] for i in range(2)) for j in range(n)]
+            exp_vector = [pow(2.71828, v) for v in output_vector]
+            sum_exp = sum(exp_vector)
+            if sum_exp > 0:
+                output_vector = [v / sum_exp for v in exp_vector]
+
+            # Get weighted average of output_vector using RGB_COLORS as weights
+            red = int(sum(output_vector[i] * RGB_COLORS[i][0] for i in range(n)))
+            green = int(sum(output_vector[i] * RGB_COLORS[i][1] for i in range(n)))
+            blue = int(sum(output_vector[i] * RGB_COLORS[i][2] for i in range(n)))
+            colour = f'rgb({red}, {green}, {blue})'
+
+            svg.rect(x - STEP / 2 - 0.5, - y - STEP / 2 - 0.5, STEP + 1, STEP + 1, fill=colour)
+
+            # max_output = max(output_vector)
+            # max_index = output_vector.index(max_output)
+            # if max_index > 0:
+            #     colour = COLOURS[max_index]
+            #     svg.rect(x - STEP / 2 - 0.5, - y - STEP / 2 - 0.5, STEP + 1, STEP + 1, fill=colour)
+
+    # Axis
+    svg.add('line', {'x1': -SIZE, 'y1': 0, 'x2': SIZE, 'y2': 0, 'stroke': 'black'})
+    svg.add('line', {'x1': 0, 'y1': -SIZE, 'x2': 0, 'y2': SIZE, 'stroke': 'black'})
+    svg.write(f'{svg_id}.svg')
+
+
+def output_map_with_lines(folder, svg_id):
+    """ Draw a 2D axis as a heatmap of what the output token will be. """
+
+    filename = os.path.join(folder, "model_output.txt")
+    data = parse_model_data(filename)
+    tokens = data['tokens']
+    embeddings = data['weights'][0]
+    weights = data['weights'][-2]
+    biases = [d[0] for d in data['weights'][-1]]
+
+    print(tokens)
+    print(weights)
+    print(biases)
+    print(embeddings)
+
+    max_x = max(abs(embedding[0]) for embedding in embeddings)
+    max_y = max(abs(embedding[1]) for embedding in embeddings)
+    max_v = max(max_x, max_y)
+    print(max_v)
+    SIZE = 100
+    SCALE = SIZE / max_v if max_v != 0 else 1
+
+    comparisons = []
+    for i in range(len(tokens)):
+        for j in range(i + 1, len(tokens)):
+            dx = weights[i][0] - weights[j][0]
+            dy = weights[i][1] - weights[j][1]
+            dz = biases[i] - biases[j]
+
+            if abs(dx) > abs(dy):
+                y1 = -max_v * SCALE - 1
+                y2 = max_v * SCALE + 1
+                x1 = (y1 * dy + dz * SCALE) / -dx
+                x2 = (y2 * dy + dz * SCALE) / -dx
+            else:
+                x1 = -max_v * SCALE - 1
+                x2 = max_v * SCALE + 1
+                y1 = (x1 * dx + dz * SCALE) / -dy
+                y2 = (x2 * dx + dz * SCALE) / -dy
+
+            # Determine which side of the line the first token is preferred.
+            side = 1 if dx * dy > 0 else -1
+
+            comparisons.append([i, j, x1, y1, x2, y2, side])
+
+    svg = SVG({'id': svg_id, 'viewBox': f'{-SIZE} {-SIZE} {SIZE * 2} {SIZE * 2}'})
+
+    # for i in range(len(tokens)):
+    #     area = find_surrounded_area(comparisons, i, SIZE)
+    #     colour = f'rgb({RGB_COLORS[i][0]},{RGB_COLORS[i][1]},{RGB_COLORS[i][2]})'
+    #     svg.add('polygon', {'points': ' '.join(f'{x},{-y}' for x, y in area), 'fill': colour, 'opacity': 0.25})
+
+    area = find_surrounded_area(comparisons, 0, SIZE)
+    colour = f'rgb({RGB_COLORS[1][0]},{RGB_COLORS[1][1]},{RGB_COLORS[1][2]})'
+    svg.add('polygon', {'points': ' '.join(f'{x},{-y}' for x, y in area), 'fill': colour, 'opacity': 0.25})
+
+    for comparison in comparisons:
+        i, j, x1, y1, x2, y2, side = comparison
+        if i == 1 or j == 1:
+            svg.add('line', {'x1': x1, 'y1': -y1, 'x2': x2, 'y2': -y2, 'stroke': 'black', 'opacity': 0.25})
+
+    # Axis
+    svg.add('line', {'x1': -SIZE, 'y1': 0, 'x2': SIZE, 'y2': 0, 'stroke': 'black'})
+    svg.add('line', {'x1': 0, 'y1': -SIZE, 'x2': 0, 'y2': SIZE, 'stroke': 'black'})
+
+    output_file = os.path.join(folder, f'{svg_id}.svg')
+    svg.write(output_file)
+
+
+def find_surrounded_area(comparisons, token, size):
+    filtered_comparisons = [c for c in comparisons if c[0] == token or c[1] == token]
+
+    # Points of the bounding box
+    bounding_points = [[size, size], [size, -size], [-size, -size], [-size, size]]
+
+    for comparison in filtered_comparisons:
+        print("\nComparison:", comparison)
+        i, j, x1, y1, x2, y2, side = comparison
+        # Determine where the comparison line intersects the bounding box
+        intersections = []
+        for p1, bounding_point1 in enumerate(bounding_points):
+            p2 = (p1 + 1) % len(bounding_points)
+            bx1, by1 = bounding_point1
+            bx2, by2 = bounding_points[p2]
+
+            denom = (x2 - x1) * (by2 - by1) - (y2 - y1) * (bx2 - bx1)
+            if denom != 0:
+                ua = ((bx2 - bx1) * (y1 - by1) - (by2 - by1) * (x1 - bx1)) / denom
+                ub = ((x2 - x1) * (y1 - by1) - (y2 - y1) * (x1 - bx1)) / denom
+                if 0 <= ua <= 1 and 0 <= ub <= 1:
+                    print('intersection at ', p1, p2)
+                    intersections.append((p2, x1 + ua * (x2 - x1), y1 + ua * (y2 - y1)))
+
+        # Update bounding box based on the intersections
+        if len(intersections) != 2:
+            print("Unexpected number of intersections:", len(intersections))
+            break
+
+        print("Intersections:", intersections)
+
+        # Get the intersections in the correct order based on the side of the line that is preferred.
+        dx = intersections[0][1] - intersections[1][1]
+        dy = intersections[0][2] - intersections[1][2]
+        
+        # Swap side depending on which token is preferred in the comparison
+        side = -side if (i == token) else side
+        if dx * dy * side < 0:
+            intersections.reverse()
+
+        new_bounding_points = [intersections[0][1:], intersections[1][1:]]
+        start_point = intersections[1][0]
+        end_point = intersections[0][0]
+        n = len(bounding_points)
+
+        print("start at :", start_point, "end at:", end_point, "side:", side)
+
+        while start_point != end_point:
+            print("Adding bounding point:", start_point)
+            new_bounding_points.append(bounding_points[start_point])
+            start_point = (start_point + 1) % n
+
+        bounding_points = new_bounding_points
+        print("Updated bounding points:", bounding_points)
+
+    return bounding_points
+
+
 def draw_network_1(folder, svg_id):
     """
     Draw a fully connected network of nodes with two layers representing the tokens in token_list.
@@ -343,7 +532,7 @@ def draw_token_embeddings(folder, svg_id, suffix=None):
 
     for i, row in enumerate(weights):
         x = round(row[0] * scale, 2)
-        y = round(row[1] * scale, 2)
+        y = round(-row[1] * scale, 2)
         svg.add('path', {'d': f'M{x - 3.5} {y - 3.5} l7 7 M{x - 3.5} {y + 3.5} l7 -7', 'class': 'cross'})
         svg.add('text', {'x': x, 'y': y - 7, 'class': 'label'}, html.escape(data['tokens'][i]))
 
@@ -389,11 +578,16 @@ def draw_chain_2():
     print(nodes)
     draw_chain('simple_chain', nodes, transitions)
 
+
 if __name__ == "__main__":
     # draw_network_1("example1", 'activation-network')
     # draw_network_2("example2", 'activation-network')
     # draw_token_embeddings("example2", 'token-embeddings')
     # draw_token_embeddings("example3", 'token-embeddings', "4")
-    draw_token_embeddings("example4", 'token-embeddings', "1_good")
+    # draw_token_embeddings("example4", 'token-embeddings', "1_good")
     # draw_chain_1()
     # draw_chain_2()
+
+    # output_map(os.path.join('example4', 'context2'), 'output-map')
+    # output_map('example2', 'output-map-heatmap')
+    output_map_with_lines('example2', 'output-map-lines')
