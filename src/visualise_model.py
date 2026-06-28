@@ -30,22 +30,31 @@ def get_filepath(folder, filename, suffix=None):
 
 def get_network(layout, tokens, weights):
     """
-    Create a network layout of nodes and edges.
+    Create a network layout which is a dictionary with nodes, edges, and layout keys.
+    Nodes and edges are flat lists of dictionaries, and layout is a list of integers
+    representing the number of nodes in each layer.
     """
 
     nodes = []
+    node_layout = []
     edges = []
     x = MARGIN_X + NODE_RADIUS
     max_layer_size = max(layout)
 
     for layer_n, layer in enumerate(layout):
+        nodes_in_layer = []
         start_y = MARGIN_Y + NODE_RADIUS + (max_layer_size - layer) * NODE_DY / 2
+
+        # Create nodes
         for i in range(layer):
             y = start_y + i * NODE_DY
-            node = { 'x': x, 'y': y, 'layer': layer_n, 'id': len(nodes) }
-            if layer_n == 0 or layer_n == len(layout) - 1:
+            node = { 'id': len(nodes), 'x': x, 'y': y, 'layer': layer_n, 'edges': [] }
+            if layer_n in (0, len(layout) - 1):
                 node['label'] = tokens[i]
+            nodes_in_layer.append(node)
             nodes.append(node)
+
+        node_layout.append(nodes_in_layer)
         x += NODE_DX
 
     # input layer to first hidden layer
@@ -69,20 +78,111 @@ def get_network(layout, tokens, weights):
     return { 'nodes': nodes, 'edges': edges, 'layout': layout }
 
 
+def get_network_2(data):
+    """
+    Create a network layout which is a dictionary with nodes, edges, and layout keys.
+    Nodes and edges are flat lists of dictionaries, and layout is a list of list of node indices.
+    Assume that we have a single hidden layer that includes a bias node.
+    """
+
+    weights = data['weights']
+    tokens = data['tokens']
+
+    nodes = []
+    edges = []
+    layout = []
+
+    def add_layer(n, add_tokens=False):
+        layer = []
+        for i in range(n):
+            _id = len(nodes)
+            node = { 'id': _id, 'edges_in': [], 'edges_out': [] }
+            if add_tokens:
+                node['label'] = tokens[i]
+            nodes.append(node)
+            layer.append(_id)
+        layout.append(layer)
+
+    # Input layer
+    add_layer(len(weights[0]), add_tokens=True)
+
+    # Hidden layer
+    add_layer(len(weights[0][0]) + 1)  # +1 for bias node
+
+    # Output layer
+    add_layer(len(weights[1]), add_tokens=True)
+
+    # Create edges from input layer to hidden layer
+    for i, row in enumerate(weights[0]):
+        for j, weight in enumerate(row):
+            node1 = i
+            node2 = layout[1][j]
+            edge = { 'node1': node1, 'node2': node2, 'weight': weight }
+            edges.append(edge)
+            nodes[node1]['edges_out'].append(edge)
+            nodes[node2]['edges_in'].append(edge)
+
+    # Create edges from hidden layer to output layer
+    for i, row in enumerate(weights[1]):
+        for j, weight in enumerate(row):
+            node1 = layout[1][j]
+            node2 = layout[2][i]
+            edge = { 'node1': node1, 'node2': node2, 'weight': weight }
+            edges.append(edge)
+            nodes[node1]['edges_out'].append(edge)
+            nodes[node2]['edges_in'].append(edge)
+
+    # Create bias edges from hidden layer to output layer
+    for i, row in enumerate(weights[2]):
+        weight = row[0]
+        node1 = layout[1][-1]  # Bias node is the last node in hidden layer
+        node2 = layout[2][i]
+        edge = { 'node1': node1, 'node2': node2, 'weight': weight }
+        edges.append(edge)
+        nodes[node1]['edges_out'].append(edge)  # Bias node is the last node in hidden layer
+        nodes[node2]['edges_in'].append(edge)
+
+    return { 'nodes': nodes, 'edges': edges, 'layout': layout }
+
+
 def get_activation_pattern(network, layout, softmax=True):
     """
-    Create a pattern of active nodes and edges based on the weights in the network.
+    Return a list where each item represents the activation pattern of the network for a given input token.
+    The activation pattern is a dictionary of node and edge activation values.
     """
+
     nodes = network['nodes']
     edges = network['edges']
     activation_patterns = []
 
-    # For each initial input token, calculate which nodes and edges are activated based on the weights.
+
+    # For each initial input token, calculate which nodes and edges are activated based on the
+    # weights.
     for token in range(layout[0]):
         node_activations = [0] * len(nodes)
         edge_activations = [0] * len(edges)
+
+        # Activate the input node corresponding to the token.
         node_activations[token] = 1
 
+        # For each subsequent layer, calculate the activations of the nodes and edges based on
+        # the previous layer's activations and the weights.
+        for layer_n in range(1, len(layout)):
+            start_node = sum(layout[:layer_n])
+            end_node = sum(layout[:layer_n + 1])
+
+            # For each node in the current layer, calculate its activation based on the
+            # activations of the previous layer's nodes and the weights of the edges connecting them.
+            for node_index in range(start_node, end_node):
+                node_activation = 0
+                for edge_index, edge in enumerate(edges):
+                    if edge['node2'] == node_index:
+                        node_activation += node_activations[edge['node1']] * edge['weight']
+                node_activations[node_index] = node_activation
+
+
+        # For each edge, if the starting node is activated, activate the edge and the ending node
+        # based on the weight.
         for i, edge in enumerate(edges):
             if edge['node1'] == token:
                 edge_activations[i] = 1
@@ -245,7 +345,85 @@ def draw_network_svg(svg_id, token_list, layout, network):
         edges_group.line(x1, y1, x2, y2, color=stroke)
 
     activations = get_activation_pattern(network, layout, False)
+    print(activations)
     _add_script(svg, activations, 'network_activation.js')
+
+    return svg
+
+
+def draw_network_svg_2(svg_id, network):
+    max_nodes = max(len(layer) for layer in network['layout'])
+    n_layers = len(network['layout'])
+
+    svg_width = 2 * (MARGIN_X + NODE_RADIUS) + (n_layers - 1) * NODE_DX
+    svg_height = 2 * (MARGIN_Y + NODE_RADIUS) + (max_nodes - 1) * NODE_DY
+
+    svg = SVG({'id': svg_id, 'viewBox': f"0 0 {svg_width} {svg_height}"})
+    _add_styles(svg)
+
+    svg.rect(0, 0, svg_width, svg_height, classname='hit-box background')
+
+    nodes_group = svg.add('g', {'class': 'node'})
+    edges_group = svg.add('g', {'class': 'edge'})
+
+    max_weight = max(edge['weight'] for edge in network['edges'])
+    min_weight = min(edge['weight'] for edge in network['edges'])
+
+    # Position nodes in the SVG based on their layer and index within the layer
+    for layer_i, layer in enumerate(network['layout']):
+        x = MARGIN_X + layer_i * NODE_DX + NODE_RADIUS
+
+        for node_id in layer:
+            node = network['nodes'][node_id]
+            y = MARGIN_Y + (max_nodes - len(layer)) * NODE_DY / 2 + layer.index(node_id) * NODE_DY + NODE_RADIUS
+            node['x'] = x
+            node['y'] = y
+
+            if 'label' not in node:
+                nodes_group.circle(x, y, NODE_RADIUS)
+            else:
+                classname = 'input-node' if layer_i == 0 else 'output-node'
+                offset = -1 if layer_i == 0 else 1
+
+                node_group = nodes_group.add('g', {
+                    'class': classname,
+                    'transform': f'translate({x},{y})'}
+                )
+                node_group.add('circle', {'r': NODE_RADIUS})
+                node_group.add('text', {'class': 'activation-value'}, 0)
+                node_group.add('text', {'x': offset * (5 + NODE_RADIUS)}, html.escape(node['label']))
+
+                if layer_i == 0:
+                    rect_x = -NODE_RADIUS - MARGIN_X
+                    rect_width = MARGIN_X + 2 * NODE_RADIUS + 2
+                    node_group.rect(rect_x, -NODE_RADIUS - 1, rect_width, 2 * NODE_RADIUS + 2, classname = 'hit-box')
+
+    # Draw edges between nodes based on the network's edges
+    for edge in network['edges']:
+        node1 = network['nodes'][edge['node1']]
+        node2 = network['nodes'][edge['node2']]
+        x1 = node1['x']
+        y1 = node1['y']
+        x2 = node2['x']
+        y2 = node2['y']
+        dx = x2 - x1
+        dy = y2 - y1
+        d = (dx ** 2 + dy ** 2) ** 0.5
+        if d > 0:
+            offset_x = dx / d * (NODE_RADIUS + 2)
+            offset_y = dy / d * (NODE_RADIUS + 2)
+            x1 += offset_x
+            y1 += offset_y
+            x2 -= offset_x
+            y2 -= offset_y
+        
+        if edge['weight'] > 0:
+            colour = lerp_colour(edge['weight'], max_weight, GREY, BLUE)
+        else:
+            colour = lerp_colour(-edge['weight'], -min_weight, GREY, YELLOW)
+
+        stroke = f"rgb({colour[0]},{colour[1]},{colour[2]})"
+        edges_group.line(x1, y1, x2, y2, color=stroke)
 
     return svg
 
@@ -485,8 +663,6 @@ def draw_network_1(folder, svg_id):
     network = get_network(layout, data['tokens'], data['weights'])
     draw_network_svg(svg_id, data['tokens'], layout, network)
 
-    print(network)
-
 
 def draw_network_2(folder, svg_id, suffix=None):
     """
@@ -495,19 +671,12 @@ def draw_network_2(folder, svg_id, suffix=None):
 
     filepath = get_filepath(folder, "model_output", suffix)
     data = parse_model_data(filepath)
-    weights = data['weights']
+    network = get_network_2(data)
 
-    n = len(weights[0])
-    hidden = len(weights[0][0])
-    layout = [n, hidden, n]
-
-    network = get_network(layout, data['tokens'], data['weights'])
+    svg = draw_network_svg_2(svg_id, network)
 
     svg_filename = f'{svg_id}.svg' if suffix is None else f'{svg_id}_{suffix}.svg'
-    svg = draw_network_svg(svg_id, data['tokens'], layout, network)
     svg.write(os.path.join(folder, svg_filename))
-
-    # print(network)
 
 
 def draw_token_embeddings(folder, svg_id, suffix=None):
@@ -581,7 +750,7 @@ def draw_chain_2():
 
 if __name__ == "__main__":
     # draw_network_1("example1", 'activation-network')
-    # draw_network_2("example2", 'activation-network')
+    draw_network_2("example2", 'activation-network')
     # draw_token_embeddings("example2", 'token-embeddings')
     # draw_token_embeddings("example3", 'token-embeddings', "4")
     # draw_token_embeddings("example4", 'token-embeddings', "1_good")
@@ -590,4 +759,4 @@ if __name__ == "__main__":
 
     # output_map(os.path.join('example4', 'context2'), 'output-map')
     # output_map('example2', 'output-map-heatmap')
-    output_map_with_lines('example2', 'output-map-lines')
+    # output_map_with_lines('example2', 'output-map-lines')
